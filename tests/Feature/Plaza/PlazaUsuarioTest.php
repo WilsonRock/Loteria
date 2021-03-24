@@ -25,6 +25,11 @@ class PlazaUsuarioTest extends TestCase
         $this->postJson(route('plazas.users.store', $plaza), $nuevoUsuario)
             ->assertStatus(201)
             ->assertSee($nuevoUsuario['nombres']);
+
+        $this->assertDatabaseHas('users', ['documento' => $nuevoUsuario['documento']]);
+
+        $usuario = User::where('documento', $nuevoUsuario['documento'])->first();
+        $this->assertDatabaseHas('saldo_actuals', ['user_id' => $usuario->id]);
     }
 
     /** @test */
@@ -41,6 +46,11 @@ class PlazaUsuarioTest extends TestCase
             ->assertStatus(201)
             ->assertSee($nuevoAdmin['nombres'])
             ->assertSee('Administrador Plaza');
+
+        $this->assertDatabaseHas('users', ['documento' => $nuevoAdmin['documento']]);
+
+        $admin = User::where('documento', $nuevoAdmin['documento'])->first();
+        $this->assertDatabaseHas('saldo_actuals', ['user_id' => $admin->id]);
     }
 
     /** @test */
@@ -71,6 +81,11 @@ class PlazaUsuarioTest extends TestCase
         $this->postJson(route('plazas.users.store', $plaza), $nuevoUsuario)
             ->assertStatus(201)
             ->assertSee($nuevoUsuario['nombres']);
+
+        $this->assertDatabaseHas('users', ['documento' => $nuevoUsuario['documento']]);
+
+        $usuario = User::where('documento', $nuevoUsuario['documento'])->first();
+        $this->assertDatabaseHas('saldo_actuals', ['user_id' => $usuario->id]);
     }
 
     /** @test */

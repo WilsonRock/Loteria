@@ -26,4 +26,11 @@ class TipoBalance extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    const RECARGA_SALDO = 'recarga-saldo';
+
+    public static function obtenerTipoRecargaSaldo() {
+        //dd(self);
+        return self::where('nombre', self::RECARGA_SALDO)->first();
+    }
 }

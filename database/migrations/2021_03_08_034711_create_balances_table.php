@@ -24,8 +24,8 @@ class CreateBalancesTable extends Migration
             $table->uuid('parent_id')->nullable();
             $table->foreignId('tipo_balance_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('cliente_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('venta_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('cliente_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('venta_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();
             $table->primary('id');

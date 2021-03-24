@@ -78,7 +78,7 @@ class PlazaTest extends TestCase
 
     
     /** @test */
-    public function puede_actualizar_una_plaza()
+    public function superadmin_puede_actualizar_una_plaza()
     {
         $plaza = Plaza::factory()->create();
 

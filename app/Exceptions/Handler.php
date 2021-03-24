@@ -89,8 +89,9 @@ class Handler extends ExceptionHandler
         } else if ($e instanceof HttpException) {
             return $this->errorResponse($e->getMessage(), $e->getStatusCode());
         } else {
-            if (config('app.debug'))
-                return $this->errorResponse($e->getMessage(), 500);
+            if (config('app.debug')){
+                    return $this->errorResponse($e->getMessage(), 500);
+            }
             else {
                 return $this->errorResponse('Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
             }

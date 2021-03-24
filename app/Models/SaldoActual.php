@@ -39,4 +39,13 @@ class SaldoActual extends Model
     {
         return $this->belongsTo(\App\Models\User::class);
     }
+
+    public static function obtenerSaldoPorDefecto($id)
+    {
+        return [
+            'saldo' => 0,
+            'deuda' => 0,
+            'user_id' => $id
+        ];
+    }
 }

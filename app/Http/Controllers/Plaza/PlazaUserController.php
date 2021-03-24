@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\ApiController;
 use App\Models\Estado;
+use App\Models\SaldoActual;
 use Illuminate\Support\Facades\Auth;
 
 class PlazaUserController extends ApiController
@@ -43,13 +44,21 @@ class PlazaUserController extends ApiController
             }
         }
 
+        //Organizamos datos para crear el usuario
         $validate = $this->validate($request, $rules);
         $validate['password'] = Hash::make('password');
         $validate['estado_id'] = Estado::where('nombre', Estado::INACTIVO)->first()->id;
+
+        //creamos el usuario
         $usuario = User::create($validate);
 
+        //asignamos el usuario a la plaza perteneciente
         $plaza->users()->attach($usuario->id);
+        //asignamos el rol correspondiente
         $usuario->assignRole('Vendedor');
+
+        //asignamos saldo al usuario
+        SaldoActual::create(SaldoActual::obtenerSaldoPorDefecto($usuario->id));
 
         return $this->showOne($usuario, 201);
     }
@@ -79,6 +88,9 @@ class PlazaUserController extends ApiController
         $plaza->users()->attach($usuario->id);
         $usuario->assignRole('Administrador Plaza');
 
+        //asignamos saldo al usuario
+        SaldoActual::create(SaldoActual::obtenerSaldoPorDefecto($usuario->id));
+        
         return $this->showOne($usuario, 201);
     }
 
