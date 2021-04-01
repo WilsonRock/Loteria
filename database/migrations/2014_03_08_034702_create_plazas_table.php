@@ -20,6 +20,7 @@ class CreatePlazasTable extends Migration
             $table->string('nombre', 150);
             $table->foreignId('municipio_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('estado_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('parent_id')->nullable()->constrained('plazas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -53,9 +53,11 @@ class PlazaTest extends TestCase
     /** @test */
     public function superadmin_puede_crear_una_plaza()
     {
-        $plaza = Plaza::factory()->raw();
-
-        Sanctum::actingAs(User::factory()->create()->assignRole('Super Admin'));
+        $user = User::factory()->create()->assignRole('Super Admin');
+        $plaza = Plaza::factory([
+            'parent_id' =>$user->plaza->id
+        ])->raw();
+        Sanctum::actingAs($user);
 
         $this->postJson(route('plazas.store'), $plaza)
             ->assertStatus(201)

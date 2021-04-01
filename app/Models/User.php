@@ -27,7 +27,8 @@ class User extends Authenticatable
         'password',
         'estado_id',
         'documento',
-        'telefono'
+        'telefono',
+        'plaza_id'
     ];
 
     protected $dates = ['deleted_at'];
@@ -81,13 +82,13 @@ class User extends Authenticatable
         return $this->belongsTo(\App\Models\Estado::class);
     }
 
-    public function plazas()
+    public function plaza()
     {
-        return $this->belongsToMany(\App\Models\Plaza::class);
+        return $this->belongsTo(\App\Models\Plaza::class);
     }
 
     public function saldoActual()
     {
-        return $this->hasOne(\App\Models\SaldoActual::class);
+        return $this->morphMany(SaldoActual::class,'model');
     }
 }

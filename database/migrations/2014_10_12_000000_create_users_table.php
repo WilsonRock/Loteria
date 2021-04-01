@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('estado_id')->constrained('estados')->cascadeOnDelete();
+            $table->foreignId('plaza_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -48,4 +48,9 @@ class SaldoActual extends Model
             'user_id' => $id
         ];
     }
+
+    public function model()
+    {
+        return $this->morphTo();
+    }
 }

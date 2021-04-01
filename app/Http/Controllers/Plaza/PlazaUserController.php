@@ -36,7 +36,8 @@ class PlazaUserController extends ApiController
             'apellidos' => 'required|string',
             'documento' => 'required|string',
             'telefono' => 'required|string',
-            'email' => 'required|string'
+            'email' => 'required|string',
+            'plaza_id' => 'required|exists:plazas,id'
         ];
         if(!Auth::user()->hasRole('Super Admin')) {
             if($plaza->id !== Auth::user()->plazas()->first()->id) {
@@ -52,13 +53,16 @@ class PlazaUserController extends ApiController
         //creamos el usuario
         $usuario = User::create($validate);
 
-        //asignamos el usuario a la plaza perteneciente
-        $plaza->users()->attach($usuario->id);
         //asignamos el rol correspondiente
         $usuario->assignRole('Vendedor');
 
+        $saldoActual = new SaldoActual();
+        $saldoActual->saldo = 0;
+        $saldoActual->deuda = 0;
+
         //asignamos saldo al usuario
-        SaldoActual::create(SaldoActual::obtenerSaldoPorDefecto($usuario->id));
+        $usuario->saldoActual()->save($saldoActual);
+        //SaldoActual::create(SaldoActual::obtenerSaldoPorDefecto($usuario->id));
 
         return $this->showOne($usuario, 201);
     }
@@ -77,7 +81,8 @@ class PlazaUserController extends ApiController
             'apellidos' => 'required|string',
             'documento' => 'required|string',
             'telefono' => 'required|string',
-            'email' => 'required|string'
+            'email' => 'required|string',
+            'plaza_id' => 'required|exists:plazas,id'
         ];
         
         $validate = $this->validate($request, $rules);
@@ -85,11 +90,14 @@ class PlazaUserController extends ApiController
         $validate['estado_id'] = Estado::where('nombre', Estado::ACTIVO)->first()->id;
         $usuario = User::create($validate);
 
-        $plaza->users()->attach($usuario->id);
         $usuario->assignRole('Administrador Plaza');
 
+        $saldoActual = new SaldoActual();
+        $saldoActual->saldo = 0;
+        $saldoActual->deuda = 0;
+
         //asignamos saldo al usuario
-        SaldoActual::create(SaldoActual::obtenerSaldoPorDefecto($usuario->id));
+        $usuario->plaza->saldoActual()->save($saldoActual);
         
         return $this->showOne($usuario, 201);
     }

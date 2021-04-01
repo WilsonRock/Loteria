@@ -20,6 +20,7 @@ class Plaza extends Model
         'nombre',
         'municipio_id',
         'estado_id',
+        'parent_id'
     ];
 
     protected $dates = ['deleted_at'];
@@ -49,5 +50,10 @@ class Plaza extends Model
     public function estado()
     {
         return $this->belongsTo(\App\Models\Estado::class);
+    }
+
+    public function saldoActual()
+    {
+        return $this->morphMany(SaldoActual::class,'model');
     }
 }

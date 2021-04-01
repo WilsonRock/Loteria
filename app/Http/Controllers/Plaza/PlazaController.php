@@ -33,11 +33,11 @@ class PlazaController extends ApiController
         $reglas = [
             'nombre' => 'required|string',
             'municipio_id' => 'required|exists:municipios,id',
-            'estado_id' => 'required|exists:estados,id'
+            'estado_id' => 'required|exists:estados,id',
+            'parent_id' => 'required|exists:plazas,id'
         ];
 
         $campos = $this->validate($request,$reglas);
-
         $plaza = Plaza::create($campos);
 
         return $this->showOne($plaza, 201);

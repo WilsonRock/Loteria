@@ -16,7 +16,6 @@ class LoginTest extends TestCase
     function podemos_logearnos_con_credenciales_validas()
     {
         $user = User::factory()->create();
-
         $response = $this->postJson(route('login'), [
             'email' => $user->email,
             'password' => 'password'

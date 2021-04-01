@@ -19,7 +19,9 @@ class CreateSaldoActualsTable extends Migration
             $table->id();
             $table->double('saldo');
             $table->double('deuda');
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('model_id');
+            $table->string('model_type');
+            //$table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
         });
