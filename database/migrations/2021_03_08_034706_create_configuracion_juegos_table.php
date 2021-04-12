@@ -24,9 +24,9 @@ class CreateConfiguracionJuegosTable extends Migration
             $table->integer('cifras');
             $table->double('premio');
             $table->longText('terminos');
-            $table->foreignId('tipo_juego_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('municipio_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('estado_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('tipo_juego_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('municipio_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('estado_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
         });

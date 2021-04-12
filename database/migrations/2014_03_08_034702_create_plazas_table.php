@@ -18,12 +18,15 @@ class CreatePlazasTable extends Migration
         Schema::create('plazas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nombre', 150);
-            $table->foreignId('municipio_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('estado_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('parent_id')->nullable()->constrained('plazas')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('municipio_id')->constrained()->onDelete('cascade');
+            $table->foreignId('estado_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
+        Schema::table('plazas', function (Blueprint $table)
+        {
+            $table->foreignUuid('parent_id')->nullable()->constrained('plazas')->onDelete('cascade');
+        }); 
 
         Schema::enableForeignKeyConstraints();
     }
@@ -35,6 +38,8 @@ class CreatePlazasTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('plazas');
+        Schema::enableForeignKeyConstraints();
     }
 }

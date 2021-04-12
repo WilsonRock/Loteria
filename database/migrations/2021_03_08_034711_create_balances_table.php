@@ -22,14 +22,14 @@ class CreateBalancesTable extends Migration
             $table->text('descripcion');
             $table->double('precio');
             $table->uuid('parent_id')->nullable();
-            $table->foreignId('tipo_balance_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('cliente_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('venta_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('tipo_balance_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignUuid('cliente_id')->nullable()->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignUuid('venta_id')->nullable()->constrained()->onDelete('cascade')->cascadeOnUpdate();
 
             $table->timestamps();
             $table->primary('id');
-            $table->foreign('parent_id')->references('id')->on('balances')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('parent_id')->references('id')->on('balances')->onDelete('cascade')->cascadeOnUpdate();
         });
 
         Schema::enableForeignKeyConstraints();

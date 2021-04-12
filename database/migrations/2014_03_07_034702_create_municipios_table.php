@@ -19,7 +19,7 @@ class CreateMunicipiosTable extends Migration
             $table->id();
             $table->string('nombre', 100);
             $table->string('codigo', 50);
-            $table->foreignId('departamento_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('departamento_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });
 

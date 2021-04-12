@@ -83,17 +83,15 @@ class PlazaUsuarioTest extends TestCase
         ])->create()->givePermissionTo('plaza.crear.usuario');
         Estado::factory(['nombre' => 'inactivo'])->create();
         Sanctum::actingAs($usuario);
-
         $nuevoUsuario = User::factory()->raw();
         $this->postJson(route('plazas.users.store', $plaza), $nuevoUsuario)
-            ->dump()
             ->assertStatus(201)
             ->assertSee($nuevoUsuario['nombres']);
 
         $this->assertDatabaseHas('users', ['documento' => $nuevoUsuario['documento']]);
 
         $usuario = User::where('documento', $nuevoUsuario['documento'])->first();
-        $this->assertDatabaseHas('saldo_actuals', ['user_id' => $usuario->id]);
+        $this->assertDatabaseHas('saldo_actuals', ['model_id' => $usuario->id]);
     }
 
     /** @test */
@@ -101,8 +99,9 @@ class PlazaUsuarioTest extends TestCase
     {
         $plazas = Plaza::factory()->times(2)->create();
 
-        $usuario = User::factory()->create()->givePermissionTo('plaza.crear.usuario');
-        $plazas[0]->users()->attach($usuario->id);
+        $usuario = User::factory([
+            'plaza_id' => $plazas[0]->id
+        ])->create()->givePermissionTo('plaza.crear.usuario');
         Estado::factory(['nombre' => 'activo'])->create();
         Sanctum::actingAs($usuario);
 

@@ -18,7 +18,7 @@ class VerificarSuperAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Auth::user()->hasRole('Super Admin') && Auth::user()->plazas()->first()->id !== $request->route('plaza')->id) {
+        if(!Auth::user()->hasRole('Super Admin') && Auth::user()->plaza->id !== $request->route('plaza')->id) {
             throw new AuthorizationException('User does not have the right permissions.');
         }
         return $next($request);

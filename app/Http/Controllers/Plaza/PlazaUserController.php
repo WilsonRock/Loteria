@@ -40,7 +40,7 @@ class PlazaUserController extends ApiController
             'plaza_id' => 'required|exists:plazas,id'
         ];
         if(!Auth::user()->hasRole('Super Admin')) {
-            if($plaza->id !== Auth::user()->plazas()->first()->id) {
+            if($plaza->id !== Auth::user()->plaza->id) {
                 return $this->errorResponse('No cuenta con permisos para crear un usuario para otra plaza', 403);
             }
         }

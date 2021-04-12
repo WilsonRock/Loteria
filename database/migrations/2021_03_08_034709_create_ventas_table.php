@@ -20,8 +20,8 @@ class CreateVentasTable extends Migration
             $table->timestamp('fecha_venta');
             $table->json('boletos');
             $table->double('precio');
-            $table->foreignUuid('cliente_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('configuracion_juego_plaza_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('cliente_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignUuid('configuracion_juego_plaza_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });
 

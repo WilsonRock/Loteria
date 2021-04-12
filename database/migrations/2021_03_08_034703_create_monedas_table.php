@@ -20,7 +20,7 @@ class CreateMonedasTable extends Migration
             $table->string('codigo', 50);
             $table->string('nombre', 50);
             $table->string('simbolo', 50);
-            $table->foreignId('pais_id')->constrained('paises')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('pais_id')->constrained('paises')->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });
 

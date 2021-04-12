@@ -19,7 +19,7 @@ class CreateDepartamentosTable extends Migration
             $table->id();
             $table->string('nombre', 100);
             $table->string('codigo', 50);
-            $table->foreignId('pais_id')->constrained('paises')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('pais_id')->constrained('paises')->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });
 

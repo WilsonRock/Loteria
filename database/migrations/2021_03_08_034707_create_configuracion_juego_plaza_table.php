@@ -19,8 +19,8 @@ class CreateConfiguracionJuegoPlazaTable extends Migration
             $table->uuid('id')->primary();
             $table->timestamp('fecha_inicial')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('fecha_final')->default(\DB::raw('CURRENT_TIMESTAMP'));
-            $table->foreignUuid('configuracion_juego_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('plaza_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('configuracion_juego_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignUuid('plaza_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
         });
 
         Schema::enableForeignKeyConstraints();

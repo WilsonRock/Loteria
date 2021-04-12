@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Plaza;
 
+use App\Models\Estado;
 use App\Models\Plaza;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -91,6 +92,55 @@ class PlazaTest extends TestCase
         $this->putJson(route('plazas.update', $plaza), $valoresNuevosPlaza)
             ->assertStatus(200)
             ->assertSee($valoresNuevosPlaza['nombre']);
+    }
+
+    /** @test */
+    public function plaza_puede_crear_plaza_hija()
+    {
+        $plaza = Plaza::factory()->create();
+
+        $administradorPlaza = User::factory([
+            'plaza_id' => $plaza->id
+        ])->create()->assignRole('Administrador Plaza');
+
+        Estado::factory(['nombre' => 'inactivo'])->create();
+        Sanctum::actingAs($administradorPlaza);
+
+        $nuevaPlaza = Plaza::factory()->raw();
+        $this->postJson(route('plazas.plaza.store', $plaza), $nuevaPlaza)
+             ->assertStatus(201)
+             ->assertSee($nuevaPlaza['nombre'])
+             ->assertSee($plaza->id);
+    }
+
+    /** @test */
+    public function plaza_no_puede_crear_plaza_hija_de_otra_plaza()
+    {
+        $plazas = Plaza::factory()->times(2)->create();
+
+        $administradorPlaza = User::factory([
+            'plaza_id' => $plazas[0]->id
+        ])->create()->assignRole('Administrador Plaza');
+        Sanctum::actingAs($administradorPlaza);
+
+        $nuevaPlaza = Plaza::factory()->raw();
+        $this->postJson(route('plazas.plaza.store', $plazas[1]), $nuevaPlaza)
+             ->assertStatus(403);
+    }
+
+    /** @test */
+    public function superadmin_puede_crear_plaza_hija_de_cualquier_plaza()
+    {
+        $plaza = Plaza::factory()->create();
+
+        Sanctum::actingAs(User::factory()->create()->assignRole('Super Admin'));
+        Estado::factory(['nombre' => 'inactivo'])->create();
+
+        $nuevaPlaza = Plaza::factory()->raw();
+        $this->postJson(route('plazas.plaza.store', $plaza), $nuevaPlaza)
+             ->assertStatus(201)
+             ->assertSee($nuevaPlaza['nombre'])
+             ->assertSee($plaza->id);
     }
 
 }

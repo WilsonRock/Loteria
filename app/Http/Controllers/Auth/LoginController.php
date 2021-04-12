@@ -16,8 +16,10 @@ class LoginController extends ApiController
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required'
         ]);
+
+
         $user = User::where('email', $request->email)->first();
 
         if(!Hash::check($request->password, optional($user)->password))
@@ -27,9 +29,17 @@ class LoginController extends ApiController
             ]);
             
         }
-        
         return response()->json([
-            'plain-text-token' => $user->createToken($request->email)->plainTextToken
+            'token' =>  $user->createToken('MyApp')->plainTextToken
         ]);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return [
+            'message' => 'Tokens Revoked'
+        ];
     }
 }

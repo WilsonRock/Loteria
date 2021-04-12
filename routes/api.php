@@ -29,5 +29,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::group(['middleware' => ['role:Super Admin|Administrador Plaza']], function() {
         Route::post('plazas/{plaza}/users/{usuario}/balance/assign', 'User\UsuarioBalanceController@store')->name('plaza.users.balance.asignar');
+        Route::post('plazas/{plaza}/plaza', 'Plaza\Sons\PlazaController@store')->name('plazas.plaza.store')->middleware('verificar_superadmin');
     });
 });
