@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConfiguracionJuegoPlazaTable extends Migration
+class CreateConfiguracionJuegoPlazasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateConfiguracionJuegoPlazaTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('configuracion_juego_plaza', function (Blueprint $table) {
+        Schema::create('configuracion_juego_plazas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamp('fecha_inicial')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('fecha_final')->default(\DB::raw('CURRENT_TIMESTAMP'));
@@ -33,6 +33,6 @@ class CreateConfiguracionJuegoPlazaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('configuracion_juego_plaza');
+        Schema::dropIfExists('configuracion_juegos_plaza');
     }
 }
