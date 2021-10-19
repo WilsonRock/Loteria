@@ -1,15 +1,14 @@
 version: "3.2"
 services:
-  
   nginx:
     image: nginx:alpine
     container_name: loteria-nginx
-    restart: unless-stopped    
+    restart: unless-stopped
     ports:
-        - "8000:80"
+      - "8000:80"
     volumes:
-      - ../src:/var/www
-      - ./nginx/back:/etc/nginx/conf.d
+      - ../:/var/www
+      - ./nginx:/etc/nginx/conf.d
     networks:
       - loteria
   db:
@@ -20,14 +19,14 @@ services:
       - ./env/loteria.env
     ports:
       - "5432:5432"
-    environment:      
+    environment:
       POSTGRES_DB: loteria
       POSTGRES_USER: homestad
       POSTGRES_PASSWORD: secret
     volumes:
       - ./db/data:/var/lib/postgresql/data
     networks:
-        - loteria
+      - loteria
 
   app:
     build:
@@ -39,8 +38,8 @@ services:
     image: loteria
     container_name: loteria-app-laravel
     restart: unless-stopped
-    working_dir:  /var/www/    
-    ports: 
+    working_dir: /var/www/
+    ports:
       - "9000:9000"
     volumes:
       - ../:/var/www
@@ -48,5 +47,5 @@ services:
       - loteria
 
 networks:
-    loteria:
-        driver: bridge
+  loteria:
+    driver: bridge
