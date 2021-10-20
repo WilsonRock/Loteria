@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Plaza;
 
-use App\Models\Estado;
-use App\Models\Plaza;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,8 +19,8 @@ class PlazaTest extends TestCase
 
         Sanctum::actingAs(User::factory()->create()->assignRole('Super Admin'));
         $this->getJson(route('plazas.index'))
-             ->assertStatus(200)
-             ->assertSee($plazas[0]['id']);
+            ->assertStatus(200)
+            ->assertSee($plazas[0]['id']);
     }
 
     /** @test */
@@ -56,7 +54,7 @@ class PlazaTest extends TestCase
     {
         $user = User::factory()->create()->assignRole('Super Admin');
         $plaza = Plaza::factory([
-            'parent_id' =>$user->plaza->id
+            'parent_id' => $user->plaza->id
         ])->raw();
         Sanctum::actingAs($user);
 
@@ -79,7 +77,7 @@ class PlazaTest extends TestCase
      * TODO: crear tests para validar que se retorna un error con campos requeridos
      */
 
-    
+
     /** @test */
     public function superadmin_puede_actualizar_una_plaza()
     {
@@ -108,9 +106,9 @@ class PlazaTest extends TestCase
 
         $nuevaPlaza = Plaza::factory()->raw();
         $this->postJson(route('plazas.plaza.store', $plaza), $nuevaPlaza)
-             ->assertStatus(201)
-             ->assertSee($nuevaPlaza['nombre'])
-             ->assertSee($plaza->id);
+            ->assertStatus(201)
+            ->assertSee($nuevaPlaza['nombre'])
+            ->assertSee($plaza->id);
     }
 
     /** @test */
@@ -125,7 +123,7 @@ class PlazaTest extends TestCase
 
         $nuevaPlaza = Plaza::factory()->raw();
         $this->postJson(route('plazas.plaza.store', $plazas[1]), $nuevaPlaza)
-             ->assertStatus(403);
+            ->assertStatus(403);
     }
 
     /** @test */
@@ -138,9 +136,8 @@ class PlazaTest extends TestCase
 
         $nuevaPlaza = Plaza::factory()->raw();
         $this->postJson(route('plazas.plaza.store', $plaza), $nuevaPlaza)
-             ->assertStatus(201)
-             ->assertSee($nuevaPlaza['nombre'])
-             ->assertSee($plaza->id);
+            ->assertStatus(201)
+            ->assertSee($nuevaPlaza['nombre'])
+            ->assertSee($plaza->id);
     }
-
 }
