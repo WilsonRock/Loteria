@@ -18,9 +18,9 @@ class CreateWalletsTable extends Migration
             $table->string('tipo');
             $table->string('saldo_inicial');
             $table->string('saldo_final');
-            $table->foreignUuid('node_id')->constrained('nodes');
+            $table->foreignId('node_id')->constrained('nodes');
             $table->foreignUuid('usuario_id')->constrained('users');
-            $table->foreignUuid('venta_id')->constrained('sales');
+            $table->foreignId('venta_id')->constrained('sales');
             $table->foreignId('parent_id')->nullable()->constrained('wallets');
             $table->timestamps();
         });

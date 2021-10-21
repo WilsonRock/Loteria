@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Nodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NodesController extends Controller
 {
@@ -14,7 +15,13 @@ class NodesController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return response()->json(DB::table('nodes')
+                ->where('nodes.active', true)
+                ->get());
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
@@ -22,9 +29,14 @@ class NodesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $type_node = Nodes::create($request->all());
+            return response($type_node, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**

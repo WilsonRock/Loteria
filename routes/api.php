@@ -16,3 +16,12 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 Route::post('login', [LoginController::class, 'login'])->name('login');
+
+Route::group(['prefix' => 'v1'], function () {
+  Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('type-node', 'TypeNodesController@create');
+    Route::get('type-node', 'TypeNodesController@index');
+    Route::post('node', 'NodesController@create');
+    Route::get('node', 'NodesController@index');
+  });
+});

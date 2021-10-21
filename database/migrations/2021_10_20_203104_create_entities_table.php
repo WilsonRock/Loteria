@@ -14,7 +14,7 @@ class CreateEntitiesTable extends Migration
     public function up()
     {
         Schema::create('entities', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('zona_horaria');
             $table->string('moneda');
             $table->string('nombre_contacto');
@@ -26,7 +26,7 @@ class CreateEntitiesTable extends Migration
             $table->json('permisos');
             $table->string('balance');
             $table->boolean('active')->default(true);
-            $table->foreignUuid('node_id')->constrained('nodes');
+            $table->foreignId('node_id')->constrained('nodes');
             $table->timestamps();
         });
     }

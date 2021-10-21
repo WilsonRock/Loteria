@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNodesTable extends Migration
+class AddApiTokenToUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateNodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('nodes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('type_node_id')->constrained('type_nodes');
-            $table->boolean('active')->default(true);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('api_token', 80)->after('password')
+                ->unique()
+                ->nullable()
+                ->default(null);
         });
     }
 
@@ -28,6 +28,8 @@ class CreateNodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nodes');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }

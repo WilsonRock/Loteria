@@ -14,11 +14,11 @@ class CreateRafflesTable extends Migration
     public function up()
     {
         Schema::create('raffles', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->json('vendidos')->nullable();
             $table->json('reservados')->nullable();
             $table->boolean('active')->default(true);
-            $table->foreignUuid('node_id')->constrained('nodes');
+            $table->foreignId('node_id')->constrained('nodes');
             $table->timestamps();
         });
     }

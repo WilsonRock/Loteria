@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\TypeNodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TypeNodesController extends Controller
 {
@@ -14,7 +16,14 @@ class TypeNodesController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return response()->json(DB::table('type_nodes')
+                ->where('type_nodes.active', true)
+                ->get());
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
@@ -22,9 +31,15 @@ class TypeNodesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $type_node = TypeNodes::create($request->all());
+            return response($type_node, 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
@@ -46,7 +61,14 @@ class TypeNodesController extends Controller
      */
     public function show(TypeNodes $typeNodes)
     {
-        //
+        /* try {
+            return response()->json(DB::table('type_nodes')
+                ->where('type_nodes.active', true)
+                ->get());
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => $e], 500);
+        } */
     }
 
     /**

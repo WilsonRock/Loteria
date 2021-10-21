@@ -14,7 +14,7 @@ class CreateGamesTable extends Migration
     public function up()
     {
         Schema::create('games', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('titulo');
             $table->string('identificacion');
             $table->string('contacto');
@@ -26,7 +26,7 @@ class CreateGamesTable extends Migration
             $table->string('fecha_inicio');
             $table->string('fecha_final');
             $table->boolean('active')->default(true);
-            $table->foreignUuid('node_id')->constrained('nodes');
+            $table->foreignId('node_id')->constrained('nodes');
             $table->timestamps();
         });
     }

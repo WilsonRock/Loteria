@@ -14,14 +14,14 @@ class CreateSalesTable extends Migration
     public function up()
     {
         Schema::create('sales', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('precio');
             $table->string('premio');
             $table->string('comision');
             $table->json('caracteristicas');
             $table->foreignUuid('vendedor_id')->constrained('users');
             $table->foreignUuid('cliente_id')->constrained('users');
-            $table->foreignUuid('node_id')->constrained('nodes');
+            $table->foreignId('node_id')->constrained('nodes');
             $table->timestamps();
         });
     }

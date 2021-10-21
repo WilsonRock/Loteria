@@ -14,9 +14,9 @@ class CreateNodeHasNodesTable extends Migration
     public function up()
     {
         Schema::create('node_has_nodes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('padre_id')->constrained('nodes');
-            $table->foreignUuid('hijo_id')->constrained('nodes');
+            $table->id();
+            $table->foreignId('padre_id')->constrained('nodes');
+            $table->foreignId('hijo_id')->constrained('nodes');
             $table->timestamps();
         });
     }

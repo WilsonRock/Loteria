@@ -14,7 +14,7 @@ class CreateTypeNodesTable extends Migration
     public function up()
     {
         Schema::create('type_nodes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('name');
             $table->boolean('active')->default(true);
             $table->timestamps();
