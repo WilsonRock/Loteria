@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $type_nodes = \App\Models\TypeNodes::factory()->create();
+
+        $nodes = \App\Models\Nodes::factory()->create();
+
         $user = \App\Models\User::factory([
             'email' => 'email@email.com'
         ])->create();
