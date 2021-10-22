@@ -22,7 +22,7 @@ class NodesFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'type_node_id' => '1'
         ];
     }
 }
