@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -39,10 +40,18 @@ class LoginController extends ApiController
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        try {
+            $user = User::where('api_token', Auth::user()->api_token)->first();
 
-        return [
-            'message' => 'Tokens Revoked'
-        ];
+            $user->forceFill([
+                'api_token' => null,
+            ])->save();
+
+            return [
+                'message' => 'Sesión cerrada con éxito'
+            ];
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 }
