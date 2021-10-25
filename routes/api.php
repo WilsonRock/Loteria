@@ -22,7 +22,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('logout', 'Auth\LoginController@logout');
     Route::post('type-node', 'TypeNodesController@create');
     Route::get('type-node', 'TypeNodesController@index');
-    Route::post('node', 'NodesController@create');
+    Route::post('entidad', 'EntitiesController@create');
+    Route::post('juego', 'GamesController@create');
     Route::get('node', 'NodesController@index');
   });
 });

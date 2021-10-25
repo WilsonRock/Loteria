@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entities;
+use App\Models\NodeHasNodes;
+use App\Models\Nodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EntitiesController extends Controller
 {
@@ -14,7 +18,13 @@ class EntitiesController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return response()->json(DB::table('entities')
+                ->where('entities.active', true)
+                ->get());
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
@@ -22,9 +32,43 @@ class EntitiesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'type_node_id' => 'required',
+            'zona_horaria' => 'required',
+            'moneda' => 'required',
+            'nombre_contacto' => 'required',
+            'telefono_contacto' => 'required',
+            'email' => 'required|email',
+            'pais' => 'required',
+            'zona' => 'required',
+            'nit' => 'required',
+            'balance' => 'required',
+        ]);
+        try {
+            $node = Nodes::create(['type_node_id' => $request->type_node_id]);
+            $entity = Entities::create([
+                'node_id' => $node->id,
+                'zona_horaria' => $request->zona_horaria,
+                'moneda' => $request->moneda,
+                'nombre_contacto' => $request->nombre_contacto,
+                'telefono_contacto' => $request->telefono_contacto,
+                'email' => $request->email,
+                'pais' => $request->pais,
+                'zona' => $request->zona,
+                'nit' => $request->nit,
+                'balance' => $request->balance,
+                'permisos' => json_encode($request->permisos)
+            ]);
+            $has_node = NodeHasNodes::create([
+                'padre_id' => Auth::user()->node_id,
+                'hijo_id' => $node->id
+            ]);
+            return response($entity, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**

@@ -16,15 +16,15 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('identificacion');
+            $table->string('identificacion')->unique();
             $table->string('contacto');
             $table->string('cifras');
             $table->string('oportunidades');
             $table->string('premio');
             $table->string('precio');
             $table->string('comision');
-            $table->string('fecha_inicio');
-            $table->string('fecha_final');
+            $table->date('fecha_inicio');
+            $table->date('fecha_final');
             $table->boolean('active')->default(true);
             $table->foreignId('node_id')->constrained('nodes');
             $table->timestamps();

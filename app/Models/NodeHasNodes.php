@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class NodeHasNodes extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['padre_id', 'hijo_id'];
 }
