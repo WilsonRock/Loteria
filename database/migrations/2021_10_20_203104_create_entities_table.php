@@ -19,11 +19,11 @@ class CreateEntitiesTable extends Migration
             $table->string('moneda');
             $table->string('nombre_contacto');
             $table->string('telefono_contacto');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('pais');
             $table->string('zona');
-            $table->string('nit');
-            $table->json('permisos');
+            $table->string('nit')->unique();
+            $table->json('permisos')->nullable();
             $table->string('balance');
             $table->boolean('active')->default(true);
             $table->foreignId('node_id')->constrained('nodes');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Nodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class NodesController extends Controller
@@ -16,9 +17,36 @@ class NodesController extends Controller
     public function index()
     {
         try {
-            return response()->json(DB::table('nodes')
-                ->where('nodes.active', true)
-                ->get());
+            $node = Nodes::find(Auth::user()->node_id);
+            if(!is_null($node)){
+                $entities = DB::table('entities')
+                ->join('node_has_nodes', 'node_has_nodes.hijo_id', '=', 'entities.node_id')
+                ->join('nodes', 'nodes.id', '=', 'entities.node_id')
+                ->where('node_has_nodes.padre_id', '=', $node->id)
+                ->get();
+
+                $games = DB::table('games')
+                ->join('node_has_nodes', 'node_has_nodes.hijo_id', '=', 'games.node_id')
+                ->join('nodes', 'nodes.id', '=', 'games.node_id')
+                ->where('node_has_nodes.padre_id', '=', $node->id)
+                ->get();
+
+                /* $games = DB::table('nodes')
+                ->join('node_has_nodes', 'node_has_nodes.hijo_id', '=', 'nodes.id')
+                ->join('games', 'games.node_id', '=', 'nodes.id')
+                ->get(); */
+
+                return response()->json([
+                    'node' => $node,
+                    'children' => [
+                        'entidades' => $entities,
+                        'juegos' => $games
+                    ]
+                ]);
+            } else {
+                return response()->json(['error' => 'Commerce not found'], 404);
+            }
+            /* return response()->json($node_id, 200); */
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }
