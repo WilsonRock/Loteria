@@ -38,10 +38,8 @@ class NodesController extends Controller
 
                 return response()->json([
                     'node' => $node,
-                    'children' => [
-                        'entidades' => $entities,
-                        'juegos' => $games
-                    ]
+                    'entidades' => $entities,
+                    'juegos' => $games
                 ]);
             } else {
                 return response()->json(['error' => 'Commerce not found'], 404);

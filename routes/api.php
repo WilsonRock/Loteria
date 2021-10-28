@@ -19,6 +19,7 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('user', 'User\UserController@create');
     Route::post('logout', 'Auth\LoginController@logout');
     Route::post('type-node', 'TypeNodesController@create');
     Route::get('type-node', 'TypeNodesController@index');

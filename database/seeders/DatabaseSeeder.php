@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Nodes;
+use App\Models\TypeNodes;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $type_nodes = \App\Models\TypeNodes::factory()->create();
+        TypeNodes::create([
+            'name' => 'Entidad'
+        ]);
+        TypeNodes::create([
+            'name' => 'Juego'
+        ]);
 
-        $nodes = \App\Models\Nodes::factory()->create();
+        Nodes::factory()->create();
 
-        $user = \App\Models\User::factory([
+        User::factory([
             'email' => 'email@email.com'
         ])->create();
     }

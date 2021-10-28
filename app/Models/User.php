@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'documento',
         'telefono',
+        'node_id'
     ];
 
     protected $dates = ['deleted_at'];

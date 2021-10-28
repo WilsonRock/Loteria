@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -22,9 +25,30 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            if($request->tipo_usuario == "vendedor") {
+                $pass = bcrypt($request->password);
+            }
+            if($request->tipo_usuario == "cliente") {
+                $pass = $request->password;
+            }
+            $user = User::create([
+                'nombres' => $request->nombres,
+                'apellidos' => $request->apellidos,
+                'email' => $request->email,
+                'password' => $pass,
+                'documento' => $request->documento,
+                'telefono' => $request->telefono,
+                'node_id' => Auth::user()->node_id
+            ]);
+
+            return response($user, 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
