@@ -19,12 +19,13 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('user', 'User\UserController@create');
+    Route::post('usuario', 'User\UserController@create');
     Route::post('logout', 'Auth\LoginController@logout');
-    Route::post('type-node', 'TypeNodesController@create');
-    Route::get('type-node', 'TypeNodesController@index');
+    Route::post('tipo-nodo', 'TypeNodesController@create');
+    Route::get('tipo-nodo', 'TypeNodesController@index');
     Route::post('entidad', 'EntitiesController@create');
     Route::post('juego', 'GamesController@create');
-    Route::get('node', 'NodesController@index');
+    Route::get('nodo', 'NodesController@index');
+    Route::post('venta', 'SalesController@create');
   });
 });

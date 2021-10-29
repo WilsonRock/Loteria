@@ -23,19 +23,24 @@ class LoginController extends ApiController
 
 
         $user = User::where('email', $request->email)->first();
-
+        
         if (!Hash::check($request->password, optional($user)->password)) {
-            throw  ValidationException::withMessages([
-                'email' => [__('auth.failed')]
-            ]);
+            /* throw  ValidationException::withMessages([
+                'message' => 'Usuario y/o contraseña incorrectos.'
+            ]); */
+            return response()->json(['message' => 'Usuario y/o contraseña incorrectos.'], 500);
+        }
+        if($user->tipo_usuario == 'vendedor') {
+            $token = Str::random(60);
+            $user->forceFill([
+                'api_token' => hash('sha256', $token),
+            ])->save();
+    
+            return ['token' => $token];
+        } else {
+            return response()->json(['message' => 'Usuario y/o contraseña incorrectos.'], 500);
         }
 
-        $token = Str::random(60);
-        $user->forceFill([
-            'api_token' => hash('sha256', $token),
-        ])->save();
-
-        return ['token' => $token];
     }
 
     public function logout()
