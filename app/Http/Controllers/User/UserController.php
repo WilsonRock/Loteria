@@ -29,19 +29,20 @@ class UserController extends Controller
     {
         try {
             if($request->tipo_usuario == "vendedor") {
-                $pass = bcrypt($request->password);
+                $pass = $request->password;
             }
             if($request->tipo_usuario == "cliente") {
-                $pass = $request->password;
+                $pass = 'b7N*22D$';
             }
             $user = User::create([
                 'nombres' => $request->nombres,
                 'apellidos' => $request->apellidos,
                 'email' => $request->email,
-                'password' => $pass,
+                'password' => bcrypt($pass),
                 'documento' => $request->documento,
                 'telefono' => $request->telefono,
-                'node_id' => Auth::user()->node_id
+                'node_id' => Auth::user()->node_id,
+                'tipo_usuario' => $request->tipo_usuario
             ]);
 
             return response($user, 200);

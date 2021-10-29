@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Games;
+use App\Models\Nodes;
 use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
@@ -22,9 +25,29 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $node = Nodes::find($request->node_id);
+
+            $game = Games::where('node_id', $request->node_id)->first();
+
+            $commission = ($game->precio * $game->comision) / 100;
+
+            $sale = Sales::create([
+                'precio' => $game->precio,
+                'premio' => $game->premio,
+                'comision' => $commission,
+                'caracteristicas' => json_encode($request->caracteristicas),
+                'vendedor_id' => Auth::user()->id,
+                'cliente_id' => $request->cliente_id,
+                'node_id' => $request->node_id,
+            ]);
+
+            return response()->json($sale);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
