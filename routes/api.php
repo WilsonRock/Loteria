@@ -20,6 +20,7 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['middleware' => ['auth:api']], function () {
     Route::post('usuario', 'User\UserController@create');
+    Route::get('clientes', 'User\UserController@clientes');
     Route::post('logout', 'Auth\LoginController@logout');
     Route::post('tipo-nodo', 'TypeNodesController@create');
     Route::get('tipo-nodo', 'TypeNodesController@index');
