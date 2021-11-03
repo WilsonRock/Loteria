@@ -40,7 +40,7 @@ class NodesController extends Controller
                     'node' => $node,
                     'entidades' => $entities,
                     'juegos' => $games
-                ]);
+                ], 200);
             } else {
                 return response()->json(['error' => 'Commerce not found'], 404);
             }
@@ -59,7 +59,7 @@ class NodesController extends Controller
     {
         try {
             $type_node = Nodes::create($request->all());
-            return response($type_node, 200);
+            return response()->json(['message' => 'Tipo de nodo creado con éxito', 'data' => $type_node], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }

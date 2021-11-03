@@ -59,7 +59,7 @@ class GamesController extends Controller
                 'padre_id' => Auth::user()->node_id,
                 'hijo_id' => $node->id
             ]);
-            return response($game, 200);
+            return response()->json(['message' => 'Juego creado con éxito','data' => $game], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }

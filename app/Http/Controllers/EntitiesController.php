@@ -19,9 +19,11 @@ class EntitiesController extends Controller
     public function index()
     {
         try {
-            return response()->json(DB::table('entities')
-                ->where('entities.active', true)
-                ->get());
+            $entities = DB::table('entities')
+            ->where('entities.active', true)
+            ->get();
+
+            return response()->json(['data' => $entities], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }
@@ -65,7 +67,7 @@ class EntitiesController extends Controller
                 'padre_id' => Auth::user()->node_id,
                 'hijo_id' => $node->id
             ]);
-            return response($entity, 200);
+            return response()->json(['message' => 'Entidad creada con éxito', 'data' => $entity], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }
