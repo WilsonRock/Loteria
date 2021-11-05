@@ -9,6 +9,21 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    function combination($size, $elements)
+    {
+        if ($size > 0) {
+            $combinations = array();
+            $res = $this->combination($size - 1, $elements);
+            foreach ($res as $ce) {
+                foreach ($elements as $e) {
+                    array_Push($combinations, $ce . $e);
+                }
+            }
+            return $combinations;
+        } else {
+            return array('');
+        }
+    }
     /**
      * Seed the application's database.
      *
