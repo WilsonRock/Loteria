@@ -28,5 +28,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('juego', 'GamesController@create');
     Route::get('nodo', 'NodesController@index');
     Route::post('venta', 'SalesController@create');
+    Route::get('ventas', 'SalesController@index');
+    Route::get('boletos', 'RafflesController@index');
   });
 });
