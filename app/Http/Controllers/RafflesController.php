@@ -3,24 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Raffles;
-use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RafflesController extends Controller
 {
-    function combination($size, $elements)
+    public function reservar(Request $request)
     {
-        if ($size > 0) {
-            $combinations = array();
-            $res = $this->combination($size - 1, $elements);
-            foreach ($res as $ce) {
-                foreach ($elements as $e) {
-                    array_Push($combinations, $ce . $e);
-                }
+        try{
+            $raffle = Raffles::where('node_id', $request->node_id)->first();
+
+            if (isset($raffle->reservados_vendidos)) {
+                $reservar = json_decode($raffle->reservados_vendidos);
+                array_Push($reservar, ...$request->reservados);
+    
+                $raffle->update([
+                    'reservados_vendidos' => json_encode($reservar)
+                ]);
+            } else {
+                $raffle->update([
+                    'reservados_vendidos' => json_encode($request->reservados)
+                ]);
             }
-            return $combinations;
-        } else {
-            return array('');
+
+            return response()->json($raffle);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e]);
         }
     }
 
@@ -31,23 +39,7 @@ class RafflesController extends Controller
      */
     public function index()
     {
-        $numbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        $output = $this->combination(5, $numbers);
-        var_dump($output);
-        return response()->json($output, 200);
-    }
-
-    public function reservar(Request $request)
-    {
-        try {
-            $sorteo = Raffles::where('node_id', $request->node_id)->first();
-
-            $sorteo->update(['reservados' => '']);
-
-            return response()->json([]);
-        } catch(Exception $e) {
-            return response()->json(['error' => $e], 500);
-        }
+        //
     }
 
     /**
@@ -55,9 +47,12 @@ class RafflesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $raffles = Raffles::create([
+            'node_id' => $request->node_id
+        ]);
+        return response()->json(['data' => $raffles]);
     }
 
     /**
