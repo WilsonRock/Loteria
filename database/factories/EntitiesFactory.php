@@ -22,7 +22,16 @@ class EntitiesFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'node_id' => 1,
+            'zona_horaria' => 'GMT-5',
+            'moneda' => 'COP',
+            'nombre_contacto' => 'Principal',
+            'telefono_contacto' => '3111111111',
+            'email' => 'email@email.com',
+            'pais' => 'COL',
+            'zona' => 'Meta',
+            'nit' => '911111111',
+            'balance' => '500000'
         ];
     }
 }

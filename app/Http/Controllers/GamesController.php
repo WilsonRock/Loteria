@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Games;
 use App\Models\NodeHasNodes;
 use App\Models\Nodes;
+use App\Models\Raffles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,7 +56,10 @@ class GamesController extends Controller
                 'fecha_final' => $request->fecha_final,
                 'node_id' => $node->id
             ]);
-            $has_node = NodeHasNodes::create([
+            Raffles::create([
+                'node_id' => $node->id
+            ]);
+            NodeHasNodes::create([
                 'padre_id' => Auth::user()->node_id,
                 'hijo_id' => $node->id
             ]);

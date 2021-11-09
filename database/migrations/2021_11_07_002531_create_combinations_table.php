@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRafflesTable extends Migration
+class CreateCombinationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateRafflesTable extends Migration
      */
     public function up()
     {
-        Schema::create('raffles', function (Blueprint $table) {
+        Schema::create('combinations', function (Blueprint $table) {
             $table->id();
-            $table->json('reservados_vendidos')->nullable();
-            $table->boolean('active')->default(true);
-            $table->foreignId('node_id')->constrained('nodes');
+            $table->string('combinaciones')->unique();
+            $table->integer('cifras');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateRafflesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raffles');
+        Schema::dropIfExists('combinations');
     }
 }
