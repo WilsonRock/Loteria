@@ -10,13 +10,22 @@ class RafflesController extends Controller
 {
     public function reservar(Request $request)
     {
-        try{
+        try {
             $raffle = Raffles::where('node_id', $request->node_id)->first();
 
             if (isset($raffle->reservados_vendidos)) {
                 $reservar = json_decode($raffle->reservados_vendidos);
+                
+                foreach($reservar as $element) {
+                    foreach($request->reservados as $el) {
+                        /* return response()->json(['element' => $element, 'comb' => $el]); */
+                        if($element->numero == $el['numero']) {
+                            return response()->json(['error' => 'El boleto se encuentra reservado o vendido'], 400);
+                        }
+                    }
+                }
+
                 array_Push($reservar, ...$request->reservados);
-    
                 $raffle->update([
                     'reservados_vendidos' => json_encode($reservar)
                 ]);
@@ -25,10 +34,10 @@ class RafflesController extends Controller
                     'reservados_vendidos' => json_encode($request->reservados)
                 ]);
             }
-
-            return response()->json($raffle);
+            
+            return response()->json(['message' => 'Boleto reservado con éxito','data' => $raffle], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e]);
+            return response()->json(['error' => $e], 400);
         }
     }
 
@@ -49,10 +58,7 @@ class RafflesController extends Controller
      */
     public function create(Request $request)
     {
-        $raffles = Raffles::create([
-            'node_id' => $request->node_id
-        ]);
-        return response()->json(['data' => $raffles]);
+        //
     }
 
     /**

@@ -71,7 +71,7 @@ class SalesController extends Controller
                     'venta_id' => $sale->id
                 ]);
 
-                $wallet_commission = Wallets::create([
+                Wallets::create([
                     'tipo' => 'comision',
                     'saldo_inicial' => $initial_balance - $game->precio,
                     'saldo_final' => $final_balance + $commission,
