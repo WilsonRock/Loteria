@@ -7,6 +7,7 @@ use App\Models\NodeHasNodes;
 use App\Models\Nodes;
 use App\Models\Raffles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class GamesController extends Controller
@@ -18,7 +19,14 @@ class GamesController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $games = DB::table('games')
+            ->where('active', true)
+            ->get();
+            return response()->json(['data' => $games], 200);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
