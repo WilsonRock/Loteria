@@ -12,30 +12,33 @@ class RafflesController extends Controller
     {
         try {
             $raffle = Raffles::where('node_id', $request->node_id)->first();
+            $req = $request->reservados;
+            foreach($req as $el => $data) {
+                $req[$el]['fecha'] = date('Y-m-d H:i:s');
+                $req[$el]['estado'] = "reservado";
+            }
 
             if (isset($raffle->reservados_vendidos)) {
                 $reservar = json_decode($raffle->reservados_vendidos);
-                
-                foreach($reservar as $element) {
-                    foreach($request->reservados as $el) {
-                        /* return response()->json(['element' => $element, 'comb' => $el]); */
-                        if($element->numero == $el['numero']) {
+                foreach($req as $el => $data) {
+                    foreach($reservar as $element) {
+                        if($element->numero == $req[$el]['numero']) {
                             return response()->json(['error' => 'El boleto se encuentra reservado o vendido'], 400);
                         }
                     }
                 }
-
-                array_Push($reservar, ...$request->reservados);
+                array_Push($reservar, ...$req);
+                //array_Push($reservar, ...$request->reservados);
                 $raffle->update([
                     'reservados_vendidos' => json_encode($reservar)
                 ]);
             } else {
                 $raffle->update([
-                    'reservados_vendidos' => json_encode($request->reservados)
+                    'reservados_vendidos' => json_encode($req)
                 ]);
             }
             
-            return response()->json(['message' => 'Boleto reservado con éxito','data' => $raffle], 200);
+            return response()->json(['message' => 'Boleto reservado con éxito','data' => $req], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 400);
         }
