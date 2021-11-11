@@ -65,7 +65,7 @@ class CombinationsController extends Controller
                 array_push($combination, ...$combinations->where('id', $random));
             } */
 
-            return response()->json(['data' => $combination], 200);
+            return response()->json(['data' => $combination, 'oportunidades' => $game->oportunidades], 200);
         } catch(\Exception $e) {
             return response()->json(['error' => $e], 400);
         }
