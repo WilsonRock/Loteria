@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Games;
 use App\Models\Raffles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,7 @@ class RafflesController extends Controller
                 ]);
             }
             
-            return response()->json(['message' => 'Boleto reservado con éxito','data' => $req], 200);
+            return response()->json(['message' => 'Boleto reservado con éxito', 'data' => $req], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 400);
         }
