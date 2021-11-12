@@ -10,12 +10,22 @@ class RafflesController extends Controller
 {
     public function reservar(Request $request)
     {
+        /* $reserva = $request->reservados;
+        foreach($reserva as $i => $data) {
+            $reserva[$i] = ['numero' => $data];
+        }
+        return response()->json($reserva); */
         try {
             $raffle = Raffles::where('node_id', $request->node_id)->first();
             $req = $request->reservados;
             foreach($req as $el => $data) {
-                $req[$el]['fecha'] = date('Y-m-d H:i:s');
-                $req[$el]['estado'] = "reservado";
+                $req[$el] = [
+                    'numero' => $data,
+                    'fecha' => date('Y-m-d H:i:s'),
+                    'estado' =>"reservado"
+                ];
+                /* $req[$el]['fecha'] = date('Y-m-d H:i:s');
+                $req[$el]['estado'] = "reservado"; */
             }
 
             if (isset($raffle->reservados_vendidos)) {
