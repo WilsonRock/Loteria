@@ -80,10 +80,10 @@ class SalesController extends Controller
                     ]);
                 }
 
-                if ($entity->balance >= $game->precio) {
-                    $commission = ($game->precio * $game->comision) / 100;
+                if ($entity->balance >= $request->valor) {
+                    $commission = ($request->valor * $game->comision) / 100;
                     $sale = Sales::create([
-                        'precio' => $game->precio,
+                        'precio' => $request->valor,
                         'premio' => $game->premio,
                         'comision' => $commission,
                         'caracteristicas' => json_encode($req),
@@ -93,7 +93,7 @@ class SalesController extends Controller
                     ]);
 
                     $initial_balance = (float)$entity->balance;
-                    $final_balance = $entity->balance - $game->precio;
+                    $final_balance = $entity->balance - $request->valor;
                     $entity->update(['balance' => $final_balance + $commission]);
 
                     $wallet = Wallets::create([
@@ -107,7 +107,7 @@ class SalesController extends Controller
 
                     Wallets::create([
                         'tipo' => 'comision',
-                        'saldo_inicial' => $initial_balance - $game->precio,
+                        'saldo_inicial' => $initial_balance - $request->valor,
                         'saldo_final' => $final_balance + $commission,
                         'node_id' => $game->node_id,
                         'usuario_id' => Auth::user()->id,
