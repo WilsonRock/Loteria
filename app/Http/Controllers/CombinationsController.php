@@ -51,6 +51,7 @@ class CombinationsController extends Controller
                     if (isset($raffle->reservados_vendidos)) {
                         $comb = $combinations->where('id', $num_aleatorio)->first();
                         foreach($reservados as $element) {
+                            /* return response()->json(['el'=>$element, 'com'=>$comb]); */
                             if($element->numero == $comb->combinaciones) {
                                 $flag = true;
                             }

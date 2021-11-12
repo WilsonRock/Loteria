@@ -77,9 +77,9 @@ class UserController extends Controller
 
     public function clientes() {
         try {
-            return response()->json(DB::table('users')
+            return response()->json(['data' => DB::table('users')
                 ->where('users.tipo_usuario', 'cliente')
-                ->get());
+                ->get()]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         }
