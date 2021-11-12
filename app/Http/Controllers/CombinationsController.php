@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Combinations;
 use App\Models\Games;
 use App\Models\Raffles;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,24 +20,30 @@ class CombinationsController extends Controller
     public function index(Request $request)
     {
         try {
+            
             $game = Games::where('node_id', $request->node_id)->first();
             $raffle = Raffles::where('node_id', $request->node_id)->first();
             $reservados = json_decode($raffle->reservados_vendidos);
-            
+
             $combinations = DB::table('combinations')
             ->where('cifras', $game->cifras)
             ->get();
 
+            $boleto = 10;
+            
             if (isset($raffle->reservados_vendidos)){
-                if(sizeof($reservados) == pow(10, $game->cifras) || ((pow(10, $game->cifras) - sizeof($reservados)) < (10 * $game->oportunidades))) {
+                if((pow(10, $game->cifras) - sizeof($reservados)) < ($boleto * $game->oportunidades)) {
+                    $boleto = (pow(10, $game->cifras) - sizeof($reservados)) / $game->oportunidades;
+                }
+                if(sizeof($reservados) == pow(10, $game->cifras) || ((pow(10, $game->cifras) - sizeof($reservados)) < $game->oportunidades)) {
                     return response()->json(['error' => 'No se encontraron números disponibles'], 400);
                 }
             }
-
+            
             $rand = array();
             $combination = array();
             $x = 0;
-            while ($x < (10 * $game->oportunidades)) {
+            while ($x < ($boleto * $game->oportunidades)) {
                 $flag = false;
                 $num_aleatorio = rand($combinations->first()->id, $combinations->last()->id);
                 if (!in_array($num_aleatorio, $rand)) {
@@ -44,7 +51,6 @@ class CombinationsController extends Controller
                     if (isset($raffle->reservados_vendidos)) {
                         $comb = $combinations->where('id', $num_aleatorio)->first();
                         foreach($reservados as $element) {
-                            /* return response()->json(['ele'=>$element, 'com'=>$comb]); */
                             if($element->numero == $comb->combinaciones) {
                                 $flag = true;
                             }
@@ -65,7 +71,7 @@ class CombinationsController extends Controller
                 array_push($combination, ...$combinations->where('id', $random));
             } */
 
-            return response()->json(['data' => $combination, 'oportunidades' => $game->oportunidades], 200);
+            return response()->json(['tamaño' => sizeof($combination), 'data' => $combination, 'oportunidades' => $game->oportunidades], 200);
         } catch(\Exception $e) {
             return response()->json(['error' => $e], 400);
         }
@@ -81,8 +87,6 @@ class CombinationsController extends Controller
                     array_Push($combinations, $ce . $e);
                 }
             }
-            Log::info($combinations);
-            
             return $combinations;
         } else {
             return array('');
