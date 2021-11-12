@@ -25,8 +25,10 @@ class SalesController extends Controller
         try {
             $size = $request->size ?? 10;
             $sales = DB::table('sales')
+                ->select('sales.*', 'wallets.*', 'users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente')
                 ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
                 ->where('sales.vendedor_id', Auth::user()->id)
+                ->join('users', 'users.id', 'sales.cliente_id')
                 ->where('wallets.tipo', 'venta')
                 ->simplePaginate($size);
             return response()->json(['data' => $sales], 200);
@@ -50,15 +52,15 @@ class SalesController extends Controller
                 $req[$el]['fecha'] = date('Y-m-d H:i:s');
                 $req[$el]['estado'] = "vendido";
             }
-            if ($game->active == true && date('Y-m-d') < $game->fecha_final) {
+            if ($game->active == true && date('Y-m-d') <= $game->fecha_final) {
                 $raffle = Raffles::where('node_id', $request->juego_node_id)->first();
                 if (isset($raffle->reservados_vendidos)) {
                     $vendidos = json_decode($raffle->reservados_vendidos);
                     foreach ($req as $el) {
                         foreach ($vendidos as $element) {
                             /* return response()->json(['element' => $element, 'comb' => $el]); */
-                            if ($element->numero == $el['numero']) {
-                                return response()->json(['error' => 'El boleto se encuentra reservado o vendido', $el], 400);
+                            if ($element->numero == $el['numero'] && $element->estado == 'vendido') {
+                                return response()->json(['error' => 'El boleto se encuentra vendido'], 400);
                             }
                         }
                     }
