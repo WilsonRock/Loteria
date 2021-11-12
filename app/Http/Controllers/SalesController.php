@@ -49,8 +49,13 @@ class SalesController extends Controller
             $game = Games::where('node_id', $request->juego_node_id)->first();
             $req = $request->vendidos;
             foreach($req as $el => $data) {
-                $req[$el]['fecha'] = date('Y-m-d H:i:s');
-                $req[$el]['estado'] = "vendido";
+                $req[$el] = [
+                    'numero' => $data,
+                    'fecha' => date('Y-m-d H:i:s'),
+                    'estado' =>"vendido"
+                ];
+                /* $req[$el]['fecha'] = date('Y-m-d H:i:s');
+                $req[$el]['estado'] = "vendido"; */
             }
             if ($game->active == true && date('Y-m-d') <= $game->fecha_final) {
                 $raffle = Raffles::where('node_id', $request->juego_node_id)->first();
