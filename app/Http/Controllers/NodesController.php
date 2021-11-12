@@ -20,9 +20,9 @@ class NodesController extends Controller
             $node = Nodes::find(Auth::user()->node_id);
             if(!is_null($node)){
                 $entities = DB::table('entities')
-                ->join('node_has_nodes', 'node_has_nodes.hijo_id', '=', 'entities.node_id')
+                /* ->join('node_has_nodes', 'node_has_nodes.hijo_id', '=', 'entities.node_id') */
                 ->join('nodes', 'nodes.id', '=', 'entities.node_id')
-                ->where('node_has_nodes.padre_id', '=', $node->id)
+                /* ->where('node_has_nodes.padre_id', '=', $node->id) */
                 ->get();
 
                 $games = DB::table('games')
