@@ -34,5 +34,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('obtener-combinaciones', 'CombinationsController@index');
     Route::post('sorteo', 'RafflesController@create');
     Route::post('reservar', 'RafflesController@reservar');
+    Route::post('eliminar-reservados', 'CombinationsController@delete_reservados');
   });
 });
