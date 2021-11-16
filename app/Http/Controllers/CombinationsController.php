@@ -12,6 +12,25 @@ use Illuminate\Support\Facades\Log;
 
 class CombinationsController extends Controller
 {
+    public function delete_reservados(Request $request)
+    {
+        $raffle = Raffles::where('node_id', $request->juego_node_id)->first();
+        $all_reservados = json_decode($raffle->reservados_vendidos);
+        $req = $request->reservados;
+        $reservados = array();
+        foreach ($req as $i => $element){
+            foreach ($all_reservados as $index => $data) {
+                if ($element == $data->numero && $data->estado == 'reservado') {
+                    unset($all_reservados[$index]);
+                }
+            }
+        }
+        array_Push($reservados, ...$all_reservados);
+        $raffle->update([
+            'reservados_vendidos' => $reservados
+        ]);
+        return response()->json(['message' => 'Reservados eliminados con éxito', 'data' => $reservados]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,26 +39,40 @@ class CombinationsController extends Controller
     public function index(Request $request)
     {
         try {
-            
             $game = Games::where('node_id', $request->node_id)->first();
             $raffle = Raffles::where('node_id', $request->node_id)->first();
-            $reservados = json_decode($raffle->reservados_vendidos);
+            $all_reservados = json_decode($raffle->reservados_vendidos);
 
             $combinations = DB::table('combinations')
-            ->where('cifras', $game->cifras)
-            ->get();
+                ->where('cifras', $game->cifras)
+                ->get();
 
             $boleto = 10;
-            
-            if (isset($raffle->reservados_vendidos)){
-                if((pow(10, $game->cifras) - sizeof($reservados)) < ($boleto * $game->oportunidades)) {
+
+            if (isset($raffle->reservados_vendidos)) {
+                /* ------------------------------ */
+                $reservados = array();
+                foreach ($all_reservados as $index => $data) {
+                    $date1 = new DateTime($data->fecha);
+                    $date2 = new DateTime(date('Y-m-d H:i:s'));
+                    $dif = $date1->diff($date2);
+                    if ($dif->i > 5 && $data->estado == 'reservado') {
+                        unset($all_reservados[$index]);
+                    }
+                }
+                array_Push($reservados, ...$all_reservados);
+                $raffle->update([
+                    'reservados_vendidos' => $reservados
+                ]);
+                /* ------------------------------ */
+                if ((pow(10, $game->cifras) - sizeof($reservados)) < ($boleto * $game->oportunidades)) {
                     $boleto = (pow(10, $game->cifras) - sizeof($reservados)) / $game->oportunidades;
                 }
-                if(sizeof($reservados) == pow(10, $game->cifras) || ((pow(10, $game->cifras) - sizeof($reservados)) < $game->oportunidades)) {
+                if (sizeof($reservados) == pow(10, $game->cifras) || ((pow(10, $game->cifras) - sizeof($reservados)) < $game->oportunidades)) {
                     return response()->json(['error' => 'No se encontraron números disponibles'], 400);
                 }
             }
-            
+
             $rand = array();
             $combination = array();
             $x = 0;
@@ -50,13 +83,13 @@ class CombinationsController extends Controller
                     array_push($rand, $num_aleatorio);
                     if (isset($raffle->reservados_vendidos)) {
                         $comb = $combinations->where('id', $num_aleatorio)->first();
-                        foreach($reservados as $element) {
+                        foreach ($reservados as $element) {
                             /* return response()->json(['el'=>$element, 'com'=>$comb]); */
-                            if($element->numero == $comb->combinaciones) {
+                            if ($element->numero == $comb->combinaciones) {
                                 $flag = true;
                             }
                         }
-                        if($flag ==  false) {
+                        if ($flag ==  false) {
                             array_push($combination, ...$combinations->where('id', $num_aleatorio));
                             $x++;
                         }
@@ -73,7 +106,7 @@ class CombinationsController extends Controller
             } */
 
             return response()->json(['tamaño' => sizeof($combination), 'data' => $combination, 'oportunidades' => $game->oportunidades, 'valor_boleto' => $game->precio,], 200);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => $e], 400);
         }
     }
