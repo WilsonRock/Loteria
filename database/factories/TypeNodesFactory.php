@@ -22,7 +22,7 @@ class TypeNodesFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['Entidad', 'Juego'])
+            //
         ];
     }
 }
