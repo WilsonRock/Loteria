@@ -27,7 +27,7 @@ class SalesController extends Controller
             $sales = DB::table('sales')
                 ->select('sales.*', 'wallets.*', 'users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente')
                 ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
-                ->where('sales.vendedor_id', Auth::user()->id)
+                /* ->where('sales.vendedor_id', Auth::user()->id) */
                 ->join('users', 'users.id', 'sales.cliente_id')
                 ->where('wallets.tipo', 'venta')
                 ->simplePaginate($size);
