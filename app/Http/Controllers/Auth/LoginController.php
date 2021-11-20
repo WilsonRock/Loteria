@@ -16,6 +16,7 @@ class LoginController extends ApiController
 
     public function login(Request $request)
     {
+        return response()->json('Hola');
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
