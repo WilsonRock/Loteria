@@ -30,7 +30,7 @@ class SalesController extends Controller
                 /* ->where('sales.vendedor_id', Auth::user()->id) */
                 ->join('users', 'users.id', 'sales.cliente_id')
                 ->where('wallets.tipo', 'venta')
-                ->simplePaginate($size);
+                ->paginate($size);
             return response()->json(['data' => $sales], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e], 500);
