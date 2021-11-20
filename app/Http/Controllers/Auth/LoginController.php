@@ -24,12 +24,12 @@ class LoginController extends ApiController
 
         $user = User::where('email', $request->email)->first();
         
-        if (!Hash::check($request->password, optional($user)->password)) {
-            /* throw  ValidationException::withMessages([
-                'message' => 'Usuario y/o contraseña incorrectos.'
-            ]); */
+        /* if (!Hash::check($request->password, optional($user)->password)) {
+            //throw  ValidationException::withMessages([
+                //'message' => 'Usuario y/o contraseña incorrectos.'
+            //]);
             return response()->json(['message' => 'Usuario y/o contraseña incorrectos.'], 500);
-        }
+        } */
         if($user->tipo_usuario == 'vendedor') {
             $token = Str::random(60);
             $user->forceFill([
