@@ -15,7 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-/* Route::post('login', [LoginController::class, 'login'])->name('login'); */
+Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('login', 'Auth\LoginController@login');
 
 Route::group(['prefix' => 'v1'], function () {
