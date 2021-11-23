@@ -16,9 +16,17 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            return response()->json(['data' => DB::table('users')
+                ->select('users.id', 'users.nombres', 'users.apellidos', 'users.documento', 'users.telefono', 'users.email')
+                ->where('users.tipo_usuario', $request->tipo_usuario)
+                ->where('users.node_id', Auth::user()->node_id)
+                ->get()]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
     }
 
     /**
