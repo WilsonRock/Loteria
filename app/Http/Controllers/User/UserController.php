@@ -85,6 +85,19 @@ class UserController extends Controller
         }
     }
 
+    public function searchU(Request $request ) {
+    
+         try {
+            return response()->json(['data' => DB::table('users')
+            ->where('users.tipo_usuario', $request->search)
+            ->orWhere('users.telefono',$request->search)
+            ->orWhere('users.documento',$request->search)
+            ->orWhere('users.email',$request->search)
+            ->get()]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e], 500);
+        } 
+    }
     /**
      * Show the form for editing the specified resource.
      *
