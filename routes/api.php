@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('ventas', 'SalesController@index');
     Route::post('combinaciones', 'CombinationsController@create');
     Route::get('obtener-combinaciones', 'CombinationsController@index');
+    Route::get('searchU', 'User\UserController@searchU');
     Route::post('sorteo', 'RafflesController@create');
     Route::post('reservar', 'RafflesController@reservar');
     Route::post('eliminar-reservados', 'CombinationsController@delete_reservados');
