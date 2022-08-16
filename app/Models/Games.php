@@ -18,6 +18,7 @@ class Games extends Model
         'premio',
         'precio',
         'comision',
+        'provider',
         'fecha_inicio',
         'fecha_final',
         'active',

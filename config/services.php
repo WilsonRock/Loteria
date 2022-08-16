@@ -29,5 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'transaction' => [
+        'base_uri' => env('TRANSACTION_BASE_URI'),
+        'user_key' => env('TRANSACTION_USER_KEY'),
+        'cashin_user_key' => env('AppKey'),
+        'cashin_base_uri' => env('AppToken')
+    ]
 
 ];
