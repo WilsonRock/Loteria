@@ -8,6 +8,7 @@ use App\Models\Nodes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Raffles;
 
 class EntitiesController extends Controller
 {
@@ -94,7 +95,20 @@ class EntitiesController extends Controller
     {
         //
     }
-
+    public function searchEntities(Request $request ) {
+    
+        try {
+            //echo("ups");
+ /*           return response()->json(['data' => DB::table('entities')
+           ->where('entities.node_id', $request->search)
+           ->get()]); */
+           $raffle = Raffles::where('node_id', $request->search)->first();
+           $entities = Entities::where('node_id', $request->search)->first();
+           return response()->json(['Raffles' => $raffle, 'Entities' => $entities], 200);
+       } catch (\Exception $e) {
+           return response()->json(['error' => $e], 500);
+       } 
+   }
     /**
      * Show the form for editing the specified resource.
      *

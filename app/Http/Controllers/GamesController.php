@@ -60,9 +60,10 @@ class GamesController extends Controller
                 'premio' => $request->premio,
                 'precio' => $request->precio,
                 'comision' => $request->comision,
+                'provider' =>$request->provider,
                 'fecha_inicio' => $request->fecha_inicio,
                 'fecha_final' => $request->fecha_final,
-                'node_id' => $node->id
+                'node_id' => $node->id,
             ]);
             Raffles::create([
                 'node_id' => $node->id
