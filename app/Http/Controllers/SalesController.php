@@ -32,8 +32,8 @@ class SalesController extends Controller
                 'product_id' => '',
                 'query_type' => ''
             ]);
-           $sale = $this->request_service->SalesQuery($request);
-            return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$sale]], 201);
+           
+            return response()->json(['data' => $this->request_service->SalesQuery($request)], 201);
    
         } catch (\Throwable $th) {
             return response()->json(['error' => 'La conexión con el proveedor no se pudo establecer'], 400);
@@ -45,6 +45,7 @@ class SalesController extends Controller
        try {
         response()->json(['data' => $this->request_service->getPrueba($request)], 200);
        } catch (\Throwable $th) {
+        echo($th);
         return response()->json(['error' => 'El provider no esta activo'], 400);
        }
     }
@@ -79,6 +80,7 @@ class SalesController extends Controller
     public function create(Request $request)
     {
         try {
+               
                 $entity = Entities::where('node_id', Auth::user()->node_id)->first();
                 $game = Games::where('node_id', $request->juego_node_id)->first();
                 if($request->codigoprovider!=='2'){
@@ -158,7 +160,11 @@ class SalesController extends Controller
                             'venta_id' => $sale->id,
                             'parent_id' => $wallet->id
                         ]);
-                       $resp = $this->SalesQuery($request);
+                        if($request->codigoprovider=='2'){
+                            $resp = $this->SalesQuery($request);
+                            return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$resp]], 201);
+                        }
+                        
                         return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$sale]], 201);
                         
                     } else {
