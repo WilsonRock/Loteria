@@ -12,7 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Services\RequestService;
+use App\services\RequestService;
 class SalesController extends Controller
 {
  
