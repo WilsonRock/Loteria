@@ -55,18 +55,42 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function sum( $request)
+    {
+     $f1 = $f2 = date('Y-m-d H:i:s');   
+     if(! is_null($request->initial_date) && ! empty($request->initial_date) && ! is_null($request->final_date) || ! empty($request->final_date) ){
+            $f1 = $request->initial_date;
+            $f2 = $request->final_date;
+      }
+     $ventas =  Sales::select(\DB::raw("SUM(cast(sales.precio AS integer)) AS Total " ))->get();
+    // $premios =  Sales::select(\DB::raw("SUM(cast(sales.precio AS integer)) AS Total"))->get();
+     foreach($ventas as $el => $data) {
+        $req[$el] = [
+           $total = $data->total,
+        ];      
+     } 
+    return json_decode($total, true);
+    }
     public function index(Request $request)
     {
         try {
+          // date('Y-m-d H:i:s'),
+           $totalVenta=$this->sum($request);
+           $f1 = $f2 = date('Y-m-d H:i:s');
+            if(! is_null($request->initial_date) && ! empty($request->initial_date) && ! is_null($request->final_date) || ! empty($request->final_date) ){
+                $f1 = $request->initial_date;
+                $f2 = $request->final_date;
+            }
             $size = $request->size ?? 10;
             $sales = DB::table('sales')
-                ->select('sales.*', 'wallets.*', 'users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente')
+               ->select('sales.*', 'wallets.*','users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente', 'vendedor.nombres as nombre_Vendedor', 'vendedor.apellidos as apellidos_Vendedor')
+                ->whereBetween('sales.updated_at', [$f1, $f2])
                 ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
-                /* ->where('sales.vendedor_id', Auth::user()->id) */
                 ->join('users', 'users.id', 'sales.cliente_id')
+                ->join('users as vendedor', 'vendedor.id', "=", 'sales.vendedor_id')
                 ->where('wallets.tipo', 'venta')
                 ->paginate($size);
-            return response()->json(['data' => $sales], 200);
+            return response()->json(['data' => $sales,'Total_ventas'=>$totalVenta], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e], 500);
         }
