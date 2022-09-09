@@ -42,5 +42,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('reservar', 'RafflesController@reservar');
     Route::post('eliminar-reservados', 'CombinationsController@delete_reservados');
     Route::get('/export/sales', [App\Http\Controllers\ExcelController::class, 'SalesExport']);
+    Route::get('/export/sales/xlsx', [App\Http\Controllers\ExcelController::class, 'salesExcelExport']);
+    Route::get('/export/sales/csv', [App\Http\Controllers\ExcelController::class, 'salesCsvExport']);
   });
 });
