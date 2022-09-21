@@ -21,6 +21,7 @@ class Sales extends Model
         'vendedor_id',
         'cliente_id',
         'node_id',
+        'state'
         
     ];
 }

@@ -155,11 +155,12 @@ class SalesController extends Controller
                         $sale = Sales::create([
                             'precio' => $request->valor,
                             'premio' => $game->premio,
-                            'comision' => $commission,
+                         //   'comision' => $commission,
                             'caracteristicas' => json_encode($req),
                             'vendedor_id' => Auth::user()->id,
                             'cliente_id' => $request->cliente_id,
                             'node_id' => $request->juego_node_id,
+                            'state'=>$request-> true,
                         ]);
     
                         $initial_balance = (float)$entity->balance;
