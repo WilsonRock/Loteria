@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+/* use App\Http\Controllers\Report\ReportController; */
 
 
 /*
@@ -44,5 +45,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/export/sales', [App\Http\Controllers\ExcelController::class, 'SalesExport']);
     Route::get('/export/sales/xlsx', [App\Http\Controllers\ExcelController::class, 'salesExcelExport']);
     Route::get('/export/sales/csv', [App\Http\Controllers\ExcelController::class, 'salesCsvExport']);
+    Route::get('/conciliation/{commerce}', 'TurnoverController@conciliation')->name('.conciliation'); //aqui
+    Route::get('/conciliation/{commerce}/children', 'TurnoverController@conciliation')->name('.conciliation.children');//aqui
   });
 });
