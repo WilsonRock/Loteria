@@ -106,4 +106,34 @@ class RequestService {
   {
       return $this->providerRepository->findProductsByProvider($provider);
   }
+  
+  public function generateWinner($data){
+    { 
+       try {
+        //code...
+       // echo($data['numero']);
+        
+        $req = $data->vendidos;
+        $data = [
+            "numero"=>$data->numero,
+            "sorteo"=> $data->sorteo
+          ];
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-2-DBB100',
+            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            
+        ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+            $data
+        );
+      echo($response);
+     return response()->json(['message' => 'Ganador creado con éxito','data' => $response], 201);
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  } 
+
+
 }

@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('CrearRechage','SalesController@getPrueba');
     Route::get('nodo', 'NodesController@index');
     Route::post('venta', 'SalesController@create');
+    Route::post('getWinners', 'SalesController@getWinners');
     Route::get('ventas', 'SalesController@index');
     Route::post('combinaciones', 'CombinationsController@create');
     Route::get('obtener-combinaciones', 'CombinationsController@index');
