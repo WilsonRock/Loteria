@@ -49,7 +49,20 @@ class SalesController extends Controller
         return response()->json(['error' => 'El provider no esta activo'], 400);
        }
     }
- 
+    
+
+    public function getWinners(Request $request)
+    { 
+        try {
+          //  echo("paso");
+            response()->json(['data' => $this->request_service->generateWinner($request)], 200);
+           } catch (\Throwable $th) {
+            echo($th);
+            return response()->json(['error' => 'El provider no esta activo'], 400);
+           }
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -126,7 +139,7 @@ class SalesController extends Controller
                         'estado' =>"vendido"
                     ];
                 }
-                if ($game->active == true && date('Y-m-d') <= $game->fecha_final) {
+                if ($game->active === true && date('Y-m-d') <= $game->fecha_final) {
                    //echo($request);
                     $raffle = Raffles::where('node_id', $request->juego_node_id)->first();
                     if (isset($raffle->reservados_vendidos)&& $request->codigoprovider!=='2') {
@@ -155,7 +168,7 @@ class SalesController extends Controller
                         $sale = Sales::create([
                             'precio' => $request->valor,
                             'premio' => $game->premio,
-                         //   'comision' => $commission,
+                            'comision' => $commission,
                             'caracteristicas' => json_encode($req),
                             'vendedor_id' => Auth::user()->id,
                             'cliente_id' => $request->cliente_id,

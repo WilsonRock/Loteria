@@ -135,5 +135,25 @@ class RequestService {
 
   } 
 
-
+  public function rules($data){
+    { 
+     
+      try {
+   
+          $data = [
+            "numero"=>$data->id
+          ];
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-2-DBB100',
+            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            
+        ])->get('https://bet-api-provider.herokuapp.com/rules/game/'.$data['numero'], 
+        );
+      echo($response);
+     return response()->json(['data' => $response], 201);
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'Error','data' => $response], 400);
+       }     
+      }
+  }  
 }

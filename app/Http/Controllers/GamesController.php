@@ -9,9 +9,19 @@ use App\Models\Raffles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use App\services\RequestService;
 class GamesController extends Controller
 {
+    protected $request_service;
+
+    public function __construct(
+        RequestService $request_service
+    )
+    {
+        $this->request_service = $request_service;
+    }
+
+   
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +37,19 @@ class GamesController extends Controller
         } catch(\Exception $e) {
             return response()->json(['error' => $e], 500);
         }
+    }
+
+    public function rules(Request $request)
+    {
+        try {
+
+
+            response()->json(['data' => $this->request_service->rules($request)], 200);
+
+             } catch (\Throwable $th) {
+              echo($th);
+              return response()->json(['error' => 'El provider no esta activo'], 400);
+             }
     }
 
     /**

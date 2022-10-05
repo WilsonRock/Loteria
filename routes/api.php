@@ -31,6 +31,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('searchEntities','EntitiesController@searchEntities');
     Route::post('juego', 'GamesController@create');
     Route::get('juego', 'GamesController@index');
+    Route::get('rules', 'GamesController@rules');    
     Route::post('CrearRechage','SalesController@getPrueba');
     Route::get('nodo', 'NodesController@index');
     Route::post('venta', 'SalesController@create');
