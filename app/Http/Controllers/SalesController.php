@@ -51,12 +51,26 @@ class SalesController extends Controller
     }
     
 
+    public function setWinners(Request $request)
+    { 
+        try {
+            $resp = $this->request_service->generateWinner($request);
+            return response()->json(['message' => 'Ganadores', 'data' => [$resp]], 201); 
+           } catch (\Throwable $th) {
+            echo($th);
+            return response()->json(['error' => 'El provider no esta activo'], 400);
+           }
+    }
     public function getWinners(Request $request)
     { 
         try {
-          //  echo("paso");
-            response()->json(['data' => $this->request_service->generateWinner($request)], 200);
-           } catch (\Throwable $th) {
+           //$a= $this->request_service->getWinners($request);
+          //  response()->json(['data' => $this->request_service->getWinners($request)], 200);
+            //dd($a);
+            $resp = $this->request_service->getWinners($request);
+            return response()->json(['message' => 'Ganadores', 'data' => [$resp]], 201);   
+        
+        } catch (\Throwable $th) {
             echo($th);
             return response()->json(['error' => 'El provider no esta activo'], 400);
            }

@@ -42,8 +42,6 @@ class GamesController extends Controller
     public function rules(Request $request)
     {
         try {
-
-
             response()->json(['data' => $this->request_service->rules($request)], 200);
 
              } catch (\Throwable $th) {

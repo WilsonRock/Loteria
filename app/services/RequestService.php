@@ -118,6 +118,7 @@ class RequestService {
             "numero"=>$data->numero,
             "sorteo"=> $data->sorteo
           ];
+       //   echo($data);
             $response = Http::withHeaders([
             'AppKey' => 'betappkey-2-DBB100',
             'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
@@ -125,8 +126,8 @@ class RequestService {
         ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
             $data
         );
-      echo($response);
-     return response()->json(['message' => 'Ganador creado con éxito','data' => $response], 201);
+      $response = $response->getBody()->getContents();
+        return $response;
        } catch (\Throwable $th) {
         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
        }
@@ -155,5 +156,32 @@ class RequestService {
         return response()->json(['error' => 'Error','data' => $response], 400);
        }     
       }
-  }  
+  }
+  public function getWinners($data){
+    { 
+       try {
+       // echo($data->numero);
+        $datas = [
+          "numero"=>$data->numero,
+          "sorteo"=>$data->sorteo
+          ];
+         // echo($data);
+
+
+         $response = Http::withHeaders([
+          'AppKey' => 'betappkey-2-DBB100',
+          'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+          
+      ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+          $datas
+      );
+     $response = $response->getBody()->getContents();
+     return $response;
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  }   
 }
