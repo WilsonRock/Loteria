@@ -106,4 +106,82 @@ class RequestService {
   {
       return $this->providerRepository->findProductsByProvider($provider);
   }
+  
+  public function generateWinner($data){
+    { 
+       try {
+        //code...
+       // echo($data['numero']);
+        
+        $req = $data->vendidos;
+        $data = [
+            "numero"=>$data->numero,
+            "sorteo"=> $data->sorteo
+          ];
+       //   echo($data);
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-2-DBB100',
+            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            
+        ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+            $data
+        );
+      $response = $response->getBody()->getContents();
+        return $response;
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  } 
+
+  public function rules($data){
+    { 
+     
+      try {
+   
+          $data = [
+            "numero"=>$data->id
+          ];
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-2-DBB100',
+            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            
+        ])->get('https://bet-api-provider.herokuapp.com/rules/game/'.$data['numero'], 
+        );
+      echo($response);
+     return response()->json(['data' => $response], 201);
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'Error','data' => $response], 400);
+       }     
+      }
+  }
+  public function getWinners($data){
+    { 
+       try {
+       // echo($data->numero);
+        $datas = [
+          "numero"=>$data->numero,
+          "sorteo"=>$data->sorteo
+          ];
+         // echo($data);
+
+
+         $response = Http::withHeaders([
+          'AppKey' => 'betappkey-2-DBB100',
+          'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+          
+      ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+          $datas
+      );
+     $response = $response->getBody()->getContents();
+     return $response;
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  }   
 }

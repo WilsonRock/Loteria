@@ -97,11 +97,13 @@ class UserController extends Controller
     
          try {
             return response()->json(['data' => DB::table('users')
-            ->where('users.tipo_usuario', $request->search)
+            ->where('users.tipo_usuario', 'cliente')
+            ->where('users.nombres', $request->search)
             ->orWhere('users.telefono',$request->search)
             ->orWhere('users.documento',$request->search)
             ->orWhere('users.email',$request->search)
             ->get()]);
+            
         } catch (\Exception $e) {
             return response()->json(['error' => $e], 500);
         } 

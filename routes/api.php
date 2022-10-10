@@ -31,9 +31,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('searchEntities','EntitiesController@searchEntities');
     Route::post('juego', 'GamesController@create');
     Route::get('juego', 'GamesController@index');
+    Route::get('rules', 'GamesController@rules');    
     Route::post('CrearRechage','SalesController@getPrueba');
     Route::get('nodo', 'NodesController@index');
     Route::post('venta', 'SalesController@create');
+    Route::post('setWinners', 'SalesController@setWinners');
+    Route::get('getWinners', 'SalesController@getWinners');
     Route::get('ventas', 'SalesController@index');
     Route::post('combinaciones', 'CombinationsController@create');
     Route::get('obtener-combinaciones', 'CombinationsController@index');
@@ -41,5 +44,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('sorteo', 'RafflesController@create');
     Route::post('reservar', 'RafflesController@reservar');
     Route::post('eliminar-reservados', 'CombinationsController@delete_reservados');
+    Route::get('/export/sales', [App\Http\Controllers\ExcelController::class, 'SalesExport']);
+    Route::get('/export/sales/xlsx', [App\Http\Controllers\ExcelController::class, 'salesExcelExport']);
+    Route::get('/export/sales/csv', [App\Http\Controllers\ExcelController::class, 'salesCsvExport']);
+    Route::get('/conciliation/{commerce}', 'TurnoverController@conciliation')->name('.conciliation'); //aqui
+    Route::get('/conciliation/{commerce}/children', 'TurnoverController@conciliation')->name('.conciliation.children');//aqui
   });
 });
