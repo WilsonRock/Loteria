@@ -89,14 +89,19 @@ class SalesController extends Controller
             $f1 = $request->initial_date;
             $f2 = $request->final_date;
       }
-     $ventas =  Sales::select(\DB::raw("SUM(cast(sales.precio AS integer)) AS Total " ))->get();
+     // $ventas =  Sales::select(\DB::raw("SUM(cast(sales.precio)) AS Total " ))->get();
+     $ventas=    Sales::select(DB::raw('sum(cast(precio as double precision))'))->get();
+     
+
+
     // $premios =  Sales::select(\DB::raw("SUM(cast(sales.precio AS integer)) AS Total"))->get();
      foreach($ventas as $el => $data) {
         $req[$el] = [
            $total = $data->total,
         ];      
-     } 
-    return json_decode($total, true);
+     }
+      
+    return json_decode($ventas, true);
     }
     public function index(Request $request)
     {
@@ -119,6 +124,7 @@ class SalesController extends Controller
                 ->paginate($size);
             return response()->json(['data' => $sales,'Total_ventas'=>$totalVenta], 200);
         } catch (Exception $e) {
+           // dd($e);
             return response()->json(['error' => $e], 500);
         }
     }
