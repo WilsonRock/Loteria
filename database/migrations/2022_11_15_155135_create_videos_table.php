@@ -15,6 +15,12 @@ class CreateVideosTable extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
+            $table->string('category');
+            $table->string('title')->nullable();
+            $table->string('link');
+            $table->string('image')->nullable();
+            $table->string('id_game');
+           // $table->foreignId('id_game')->constrained('games');
             $table->timestamps();
         });
     }
