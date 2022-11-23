@@ -99,7 +99,8 @@ class RequestService {
         $data
     );
     //echo($response);
- return response()->json(['message' => 'Juego creado con éxito','data' => $response], 201);
+    $response = $response->getBody()->getContents();
+    return $response;
   }
 
   public function findProductsByProvider($provider)
