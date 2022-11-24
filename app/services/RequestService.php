@@ -46,8 +46,8 @@ class RequestService {
            ];
         $response = Http::withHeaders([
             "Accept"=> "*/*",
-            'AppKey' => 'betappkey-2-DBB100',
-            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            'AppKey' => 'betappkey-1-B1ADC1',
+            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
             'Content-Type' => 'application/json'
       
         ])->get('http://bet-api-provider.herokuapp.com/games'.$data['codigoprovider'],
@@ -83,7 +83,7 @@ class RequestService {
    // dd($data->cliente_id);
     //echo($data);
     $data = [
-          'bet_number' => $data['bet_number'],
+          'betNumber' => $data['bet_number'],
           'amount' => $data['valor'],
           'commerce'=> 2,
           'raffle'=> 1,
@@ -92,14 +92,15 @@ class RequestService {
      // $response = $this->makeRequest('POST', $this->baseUri . "superpagos/products/query", [], $data);
     //$response = $this->makeRequest("POST", "http://localhost:3000" . "/sales", [], $data ,  Http::withHeaders(['headers' => ['ApiKey' => 'betappkey-2-B0A1C1','ApiToken' => '59SGQ81SHPUB1XLJC1FOR0OSYCE1G7ICZTM1XI'] ]) );
     $response = Http::withHeaders([
-        'AppKey' => 'betappkey-2-DBB100',
-        'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+        'AppKey' => 'betappkey-1-B1ADC1',
+        'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
         
-    ])->post('https://bet-api-provider.herokuapp.com/sales', 
+    ])->post('https://bet-api-provider.herokuapp.com/api/v1/sales', 
         $data
     );
     //echo($response);
- return response()->json(['message' => 'Juego creado con éxito','data' => $response], 201);
+    $response = $response->getBody()->getContents();
+    return $response;
   }
 
   public function findProductsByProvider($provider)
@@ -120,8 +121,8 @@ class RequestService {
           ];
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-2-DBB100',
-            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            'AppKey' => 'betappkey-1-B1ADC1',
+            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
             
         ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
             $data
@@ -145,8 +146,8 @@ class RequestService {
             "numero"=>$data->id
           ];
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-2-DBB100',
-            'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+            'AppKey' => 'betappkey-1-B1ADC1',
+            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
             
         ])->get('https://bet-api-provider.herokuapp.com/rules/game/'.$data['numero'], 
         );
@@ -169,8 +170,8 @@ class RequestService {
 
 
          $response = Http::withHeaders([
-          'AppKey' => 'betappkey-2-DBB100',
-          'AppToken' => 'JC05HQPDAEQLMJS003FQX6AZGIQDQT7N2BOHX',
+          'AppKey' => 'betappkey-1-B1ADC1',
+          'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
           
       ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
           $datas
@@ -183,5 +184,32 @@ class RequestService {
      
       }
 
-  }   
+  }
+  
+  public function Qr($data){
+    { 
+       try {
+        //code...
+       // echo($data['numero']);
+        
+        $req = $data->vendidos;
+        $data = [
+          "numero"=>$data->id
+        ];
+       //   echo($data);
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-1-B1ADC1',
+            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            
+        ])->get('https://bet-api-provider.herokuapp.com/api/v1/sales/'.$data['numero'], 
+           );
+      $response = $response->getBody()->getContents();
+        return $response;
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  } 
 }
