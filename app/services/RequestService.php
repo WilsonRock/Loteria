@@ -83,7 +83,7 @@ class RequestService {
    // dd($data->cliente_id);
     //echo($data);
     $data = [
-          'bet_number' => $data['bet_number'],
+          'betNumber' => $data['bet_number'],
           'amount' => $data['valor'],
           'commerce'=> 2,
           'raffle'=> 1,
@@ -95,7 +95,7 @@ class RequestService {
         'AppKey' => 'betappkey-1-B1ADC1',
         'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
         
-    ])->post('https://bet-api-provider.herokuapp.com/sales', 
+    ])->post('https://bet-api-provider.herokuapp.com/api/v1/sales', 
         $data
     );
     //echo($response);
