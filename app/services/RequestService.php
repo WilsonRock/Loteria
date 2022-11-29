@@ -92,8 +92,10 @@ class RequestService {
      // $response = $this->makeRequest('POST', $this->baseUri . "superpagos/products/query", [], $data);
     //$response = $this->makeRequest("POST", "http://localhost:3000" . "/sales", [], $data ,  Http::withHeaders(['headers' => ['ApiKey' => 'betappkey-2-B0A1C1','ApiToken' => '59SGQ81SHPUB1XLJC1FOR0OSYCE1G7ICZTM1XI'] ]) );
     $response = Http::withHeaders([
+        'Accept'=> '*/*',  
         'AppKey' => 'betappkey-1-B1ADC1',
         'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+        'Content-Type'=> 'application/json',
         
     ])->post('https://bet-api-provider.herokuapp.com/api/v1/sales', 
         $data
@@ -212,4 +214,36 @@ class RequestService {
       }
 
   } 
+
+  public function Payment($data){
+    { 
+       try {
+        $dataID=5;
+        $req = $data->vendidos;
+        $data = [ 
+          "stateSale"=>$dataID,
+          "numero"=>$data->number
+        ];
+       //   echo($data);
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-1-B1ADC1',
+            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+         
+        ])->patch('https://bet-api-provider.herokuapp.com/api/v1/sales/'.$data['numero'], 
+        $data,     
+      );
+      $response = $response->getBody()->getContents();
+     return json_encode($response);
+        
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
+  } 
+
+
+
 }
+

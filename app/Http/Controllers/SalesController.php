@@ -181,6 +181,13 @@ class SalesController extends Controller
                         $raffle->update([
                             'reservados_vendidos' => json_encode($req)
                         ]);
+                        if($request->codigoprovider=='2'){
+                            $resp = $this->SalesQuery($request);
+                             $vendidos = json_decode($resp->content(),true);
+                             foreach ($vendidos as $i => $element){
+                                $decode = json_decode($element,true);
+                              }
+                        }
                     }
     
                     if ($entity->balance >= $request->valor) {
@@ -193,9 +200,9 @@ class SalesController extends Controller
                             'vendedor_id' => Auth::user()->id,
                             'cliente_id' => $request->cliente_id,
                             'node_id' => $request->juego_node_id,
-                           // 'state'=>$request-> true,
+                            'state'=>$decode['id'],
                         ]);
-    
+
                         $initial_balance = (float)$entity->balance;
                         $final_balance = $entity->balance - $request->valor;
                         $entity->update(['balance' => $final_balance + $commission]);
@@ -217,13 +224,8 @@ class SalesController extends Controller
                             'usuario_id' => Auth::user()->id,
                             'venta_id' => $sale->id,
                             'parent_id' => $wallet->id
-                        ]);
-                        if($request->codigoprovider=='2'){
-                            $resp = $this->SalesQuery($request);
-                            return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$resp]], 201);
-                        }
-                        
-                        return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$sale]], 201);
+                        ]);                        
+                      return response()->json(['message' => 'Venta realizada exitosamente', 'data' => [$sale]], 201);
                         
                     } else {
                         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta'], 400);

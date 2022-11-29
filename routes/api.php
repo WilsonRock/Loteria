@@ -53,12 +53,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/export/sales/csv', [App\Http\Controllers\ExcelController::class, 'salesCsvExport']);
     Route::get('/conciliation/{commerce}', 'TurnoverController@conciliation')->name('.conciliation'); //aqui
     Route::get('/conciliation/{commerce}/children', 'TurnoverController@conciliation')->name('.conciliation.children');//aqui
-    Route::post('qr', 'QrController@index');
-    Route::get('qrg','QrController@getSalesQr');
     Route::get('video', 'VideoController@index');
     Route::post('video', 'VideoController@create');
     Route::delete('videos/{id}', 'VideosController@destroy');
     Route::put('videos/{id}', 'VideosController@update');
-
+    Route::post('payment', 'GamesController@payments');
   });
 });
