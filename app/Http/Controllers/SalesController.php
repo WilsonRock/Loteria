@@ -200,7 +200,8 @@ class SalesController extends Controller
                             'vendedor_id' => Auth::user()->id,
                             'cliente_id' => $request->cliente_id,
                             'node_id' => $request->juego_node_id,
-                            'state'=>$decode['id'],
+                            'state'=>'vendido',
+                            'id_sale_provider'=>$decode['id'],
                         ]);
 
                         $initial_balance = (float)$entity->balance;

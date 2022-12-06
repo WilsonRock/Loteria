@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\services\RequestService;
 use App\Models\Entities;
 use App\Models\Sales;
+use App\Models\User;
 use App\Models\Wallets;
 use Exception;
 
@@ -161,6 +162,45 @@ class GamesController extends Controller
         //
     }
 
+    public  function createPayment(Request $request){
+    try {
+        
+        $sales = Sales::where('id', $request->id)->first();
+      //  dd($request->id);
+        if(isset($sales)){
+            $game = Games::where('node_id', $sales->node_id)->first();
+            $user = User::where('id', $sales->cliente_id)->first();
+            $provider=$this->getSalesState($sales['id_sale_provider']);
+            $vendidos =  $provider->original;
+            foreach ($vendidos as $i => $element){
+                $decode = $element;
+              }
+              if ($decode['stateSale']['description']==="ganado") {
+                //aprobar el llamado en la app para pagar el premio
+                $payment=true;
+                return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 200);
+                # code...
+              } else {
+                $payment=false;
+                return response()->json(['message' => ' Estado Apostado','sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 201);
+                # code...
+                //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
+              }
+              
+
+        }
+        if(!$sales){
+            return response()->json(['message' => 'No se encuentra el id de la venta'], 500);
+        }
+        //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
+
+        //return $sales;
+    } catch (\Throwable $th) {
+        dd($th);
+        return response()->json(['message' => 'Error'], 500);
+        }
+    }
+
     public function paymentProvider(Request $request)
     {
        
@@ -176,48 +216,73 @@ class GamesController extends Controller
     public function payments(Request $request)
     {
      try {
+   // dd($request->cliente_id);
         $entity = Entities::where('node_id', Auth::user()->node_id)->first();
         $game = Games::where('node_id', $request->juego_node_id)->first();
-
+        $user = User::where('id', $request->cliente_id)->first();
+        $Wallets = Wallets::where('usuario_id', $request->cliente_id)->first();//busqueda de la billetera del Usuario
 
             $req = [
                 'numero' =>  $request->bet_number,
                 'fecha' => date('Y-m-d H:i:s'),
                 'estado' =>"vendido"
             ];
+            $payment_provider = $this->paymentProvider($request);
+           
+            $vendidos = json_decode($payment_provider->content(),true);
+            foreach ($vendidos as $i => $element){
+               $decode = json_decode($element,true);
+             }
 
-
-            if ($entity->balance >= $request->valor) {
+   //    dd($Wallets['saldo_inicial']+ 10);
+            if ($entity->balance >= $decode['prizeWon']) {
+            //    dd($decode);
               //  $commission = ($request->valor * $game->comision) / 100;
-                $sale = Sales::create([
+             // dd($Wallets); 
+              $sale = Sales::create([
                    'precio' => "0",
-                    'premio' => "0",
+                    'premio' => $decode['prizeWon'],
                     'comision' => "0",
-                    'caracteristicas' => json_encode("Pago de premio"),
+                    'caracteristicas' => json_encode($decode),
                     'vendedor_id' => Auth::user()->id,
-                    'cliente_id' => "f3b5dd14-7d6f-41a7-b9f8-76a6994d6a8b",
+                    'cliente_id' => $request->cliente_id,
                     'node_id' => 1,
-                   // 'state'=>$request-> true,
+                   // 'state'=>$decode['stateSale'],
+                     'state'=>"pagado",
                 ]);
 
-                $initial_balance = (float)$entity->balance;
-                $final_balance = $entity->balance - $request->valor;
-              //  $entity->update(['balance' => $final_balance + $commission]);
 
+             $initial_balanceUser = (float)$Wallets->saldo_inicial;
+             $final_balanceUser = $initial_balanceUser+  $decode['prizeWon']; 
+     
+
+              $wallet = Wallets::create([
+                    'tipo' => 'premio',
+                    'saldo_inicial' => $initial_balanceUser,
+                    'saldo_final' => $final_balanceUser,
+                    'node_id' => 18,
+                    'usuario_id' => $request->cliente_id, ///trae id del cliente al que paga
+                    'venta_id' => $sale->id
+                ]); 
+
+                $initial_balance = (float)$entity->balance;
+                $final_balance = $entity->balance - $decode['prizeWon'];
+                $entity->update(['balance' => $final_balance - $decode['prizeWon']]);
                 $wallet = Wallets::create([
                     'tipo' => 'premio',
                     'saldo_inicial' => $initial_balance,
                     'saldo_final' => $final_balance,
                     'node_id' => 18,
-                    'usuario_id' => Auth::user()->id, ///traer id del cliente
+                    'usuario_id' => Auth::user()->id, ///trae id del vendedor que paga
                     'venta_id' => $sale->id
                 ]);
-                $this->paymentProvider($request);
 
-                return response()->json(['message' => 'Pago realizado exitosamente', 'data' => [$sale]], 201);
+              /* $decor= json_decode($vendidos,true); */
+                return response()->json(['message' => 'Pago realizado exitosamente', 'data' => [json_decode($sale['caracteristicas'],true)], 'dataprovider' => [$wallet]], 201);
                 
 
             }
+            return response()->json(['message' => 'No hay suficiente saldo en la entidad para pagar el premio'], 500);
         }
     
         
@@ -228,4 +293,17 @@ class GamesController extends Controller
      }               
 
  }
+
+ public function getSalesState($request)
+ {
+     try {
+   //    dd($request);
+         return response()->json(['data' => $this->request_service->Qr($request)], 201);
+       
+     } catch (\Throwable $th) {
+         return response()->json(['error' => 'La conexión con el proveedor no se pudo establecer'], 400);
+     }
+
+ }
+
 }

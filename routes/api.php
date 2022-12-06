@@ -18,10 +18,11 @@ use App\Http\Controllers\Auth\LoginController;
 
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('login', 'Auth\LoginController@login');
-Route::post('qr', 'QrController@index');
+/* Route::post('qr', 'QrController@index');
 Route::get('qrg','QrController@getSalesQr');
 Route::get('video', 'VideoController@index');
-Route::post('video', 'VideoController@create');
+Route::post('video', 'VideoController@create'); */
+
 
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['middleware' => ['auth:api']], function () {
@@ -53,10 +54,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/export/sales/csv', [App\Http\Controllers\ExcelController::class, 'salesCsvExport']);
     Route::get('/conciliation/{commerce}', 'TurnoverController@conciliation')->name('.conciliation'); //aqui
     Route::get('/conciliation/{commerce}/children', 'TurnoverController@conciliation')->name('.conciliation.children');//aqui
+    Route::post('qr', 'QrController@index');
+    Route::get('qrg','QrController@getSalesQr');
     Route::get('video', 'VideoController@index');
     Route::post('video', 'VideoController@create');
     Route::delete('videos/{id}', 'VideosController@destroy');
     Route::put('videos/{id}', 'VideosController@update');
+    Route::post('Createpayment','GamesController@createPayment');
     Route::post('payment', 'GamesController@payments');
   });
 });

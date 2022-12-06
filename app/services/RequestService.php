@@ -46,11 +46,11 @@ class RequestService {
            ];
         $response = Http::withHeaders([
             "Accept"=> "*/*",
-            'AppKey' => 'betappkey-1-B1ADC1',
-            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
             'Content-Type' => 'application/json'
       
-        ])->get('http://bet-api-provider.herokuapp.com/games'.$data['codigoprovider'],
+        ])->get('https://app-betprovider.onrender.com/api/v1/games'.$data['codigoprovider'],
     
         );
 
@@ -93,11 +93,11 @@ class RequestService {
     //$response = $this->makeRequest("POST", "http://localhost:3000" . "/sales", [], $data ,  Http::withHeaders(['headers' => ['ApiKey' => 'betappkey-2-B0A1C1','ApiToken' => '59SGQ81SHPUB1XLJC1FOR0OSYCE1G7ICZTM1XI'] ]) );
     $response = Http::withHeaders([
         'Accept'=> '*/*',  
-        'AppKey' => 'betappkey-1-B1ADC1',
-        'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+        'AppKey' => 'betappkey-test1-GYFJ4G',
+        'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
         'Content-Type'=> 'application/json',
         
-    ])->post('https://bet-api-provider.herokuapp.com/api/v1/sales', 
+    ])->post('https://app-betprovider.onrender.com/api/v1/sales', 
         $data
     );
     //echo($response);
@@ -123,10 +123,10 @@ class RequestService {
           ];
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-1-B1ADC1',
-            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
             
-        ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+        ])->post('https://app-betprovider.onrender.com/api/v1/sales/generate/winners', 
             $data
         );
       $response = $response->getBody()->getContents();
@@ -148,10 +148,10 @@ class RequestService {
             "numero"=>$data->id
           ];
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-1-B1ADC1',
-            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
             
-        ])->get('https://bet-api-provider.herokuapp.com/rules/game/'.$data['numero'], 
+        ])->get('https://app-betprovider.onrender.com/api/v1/rules/game/'.$data['numero'], 
         );
       echo($response);
      return response()->json(['data' => $response], 201);
@@ -172,10 +172,10 @@ class RequestService {
 
 
          $response = Http::withHeaders([
-          'AppKey' => 'betappkey-1-B1ADC1',
-          'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+          'AppKey' => 'betappkey-test1-GYFJ4G',
+          'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
           
-      ])->post('https://bet-api-provider.herokuapp.com/sales/generate/winners', 
+      ])->post('https://app-betprovider.onrender.com/api/v1/sales/generate/winners', 
           $datas
       );
      $response = $response->getBody()->getContents();
@@ -192,21 +192,27 @@ class RequestService {
     { 
        try {
         //code...
-       // echo($data['numero']);
-        
-        $req = $data->vendidos;
+       //echo($data);
+       if(isset($data->id)){
         $data = [
           "numero"=>$data->id
         ];
+       }else{
+     //   dd("tara");
+        $data = [
+          "numero"=>$data
+        ];
+       }
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-1-B1ADC1',
-            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
             
-        ])->get('https://bet-api-provider.herokuapp.com/api/v1/sales/'.$data['numero'], 
+        ])->get('https://app-betprovider.onrender.com/api/v1/sales/'.$data['numero'], 
            );
-      $response = $response->getBody()->getContents();
-        return $response;
+                $response = $response->getBody()->getContents();
+         return json_decode($response,true);
+
        } catch (\Throwable $th) {
         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
        }
@@ -219,21 +225,22 @@ class RequestService {
     { 
        try {
         $dataID=5;
-        $req = $data->vendidos;
-        $data = [ 
+        $body = [ 
           "stateSale"=>$dataID,
+        ];
+        $data = [  
           "numero"=>$data->number
         ];
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-1-B1ADC1',
-            'AppToken' => '7W7WN4MBZ8R3W3J1Z78QK49D2CP3E34AJ1AEE2',
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
          
-        ])->patch('https://bet-api-provider.herokuapp.com/api/v1/sales/'.$data['numero'], 
-        $data,     
+        ])->patch('https://app-betprovider.onrender.com/api/v1/sales/'.$data['numero'], 
+        $body,     
       );
       $response = $response->getBody()->getContents();
-     return json_encode($response);
+     return $response;
         
        } catch (\Throwable $th) {
         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
