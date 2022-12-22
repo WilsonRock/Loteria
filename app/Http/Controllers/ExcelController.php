@@ -5,6 +5,7 @@ use App\Exports\SalesExport;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Models\Sales;
+use Illuminate\Support\Facades\DB;
 class ExcelController extends Controller
 {
     /**
@@ -25,7 +26,16 @@ class ExcelController extends Controller
                 $f1 = $request->initial_date;
                 $f2 = $request->final_date;
             }
-          $params = Sales::whereBetween('sales.updated_at', [$f1, $f2])->get();  
+          
+         $size = $request->size ?? 10000;
+         $params = DB::table('sales')
+         ->select('sales.*', 'wallets.*','users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente', 'vendedor.nombres as nombre_Vendedor', 'vendedor.apellidos as apellidos_Vendedor')
+          ->whereBetween('sales.updated_at', [$f1, $f2])
+          ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
+          ->join('users', 'users.id', 'sales.cliente_id')
+          ->join('users as vendedor', 'vendedor.id', "=", 'sales.vendedor_id')
+          ->where('wallets.tipo', $request->Type)
+          ->paginate($size);
             return (new SalesExport($params))->download('sales.xlsx', \Maatwebsite\Excel\Excel::XLSX);
          } catch (\Exception $e) {
             //\Log::error($e);
@@ -41,9 +51,19 @@ class ExcelController extends Controller
                 $f2 = $request->final_date;
             }
 
-         $params = Sales::whereBetween('sales.updated_at', [$f1, $f2])->get();  
+         $size = $request->size ?? 10000;
+         $params = DB::table('sales')
+         ->select('sales.*', 'wallets.*','users.nombres as nombre_cliente', 'users.apellidos as apellidos_cliente', 'vendedor.nombres as nombre_Vendedor', 'vendedor.apellidos as apellidos_Vendedor')
+          ->whereBetween('sales.updated_at', [$f1, $f2])
+          ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
+          ->join('users', 'users.id', 'sales.cliente_id')
+          ->join('users as vendedor', 'vendedor.id', "=", 'sales.vendedor_id')
+          ->where('wallets.tipo', $request->Type)
+          ->paginate($size);
+       //   dd($params);
           return (new SalesExport($params))->download('sales.csv', \Maatwebsite\Excel\Excel::CSV);
         } catch (\Exception $e) {
+            dd($e);
             //\Log::error($e);
             return $this->errorResponse(null, '¡Ups, algo va mal! Puede volver a intentarlo  o contactar con el administrador',500);
         }

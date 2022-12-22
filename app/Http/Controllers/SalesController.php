@@ -91,11 +91,16 @@ class SalesController extends Controller
       }
      // $ventas =  Sales::select(\DB::raw("SUM(cast(sales.precio)) AS Total " ))->get();
      $ventas=    Sales::select(DB::raw('sum(cast(precio as double precision))'))->get();
-     
+     $premios=    Sales::select(DB::raw('sum(cast(premio as double precision))'))->get();
 
 
     // $premios =  Sales::select(\DB::raw("SUM(cast(sales.precio AS integer)) AS Total"))->get();
      foreach($ventas as $el => $data) {
+        $req[$el] = [
+           $total = $data->total,
+        ];      
+     }
+     foreach($premios as $el => $data) {
         $req[$el] = [
            $total = $data->total,
         ];      
@@ -120,7 +125,8 @@ class SalesController extends Controller
                 ->join('wallets', 'wallets.venta_id', '=', 'sales.id')
                 ->join('users', 'users.id', 'sales.cliente_id')
                 ->join('users as vendedor', 'vendedor.id', "=", 'sales.vendedor_id')
-                ->where('wallets.tipo', 'venta')
+                ->where('wallets.tipo', $request->Type)
+              //  ->where('wallets.tipo', 'premio')
                 ->paginate($size);
             return response()->json(['data' => $sales,'Total_ventas'=>$totalVenta], 200);
         } catch (Exception $e) {

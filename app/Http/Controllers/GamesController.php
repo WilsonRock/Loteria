@@ -216,16 +216,16 @@ class GamesController extends Controller
     public function payments(Request $request)
     {
      try {
-   // dd($request->cliente_id);
+ //   dd($request);
         $entity = Entities::where('node_id', Auth::user()->node_id)->first();
         $game = Games::where('node_id', $request->juego_node_id)->first();
         $user = User::where('id', $request->cliente_id)->first();
         $Wallets = Wallets::where('usuario_id', $request->cliente_id)->first();//busqueda de la billetera del Usuario
-
+        
             $req = [
                 'numero' =>  $request->bet_number,
                 'fecha' => date('Y-m-d H:i:s'),
-                'estado' =>"vendido"
+                'estado' =>"pagado"
             ];
             $payment_provider = $this->paymentProvider($request);
            
@@ -246,21 +246,26 @@ class GamesController extends Controller
                     'caracteristicas' => json_encode($decode),
                     'vendedor_id' => Auth::user()->id,
                     'cliente_id' => $request->cliente_id,
-                    'node_id' => 1,
+                    'node_id' => $request->node_id,
                    // 'state'=>$decode['stateSale'],
                      'state'=>"pagado",
                 ]);
 
 
-             $initial_balanceUser = (float)$Wallets->saldo_inicial;
-             $final_balanceUser = $initial_balanceUser+  $decode['prizeWon']; 
-     
+          
+             if($Wallets){// valido saldo anterior 
+                $initial_balanceUser = (float)$Wallets->saldo_inicial;
+                $final_balanceUser = $initial_balanceUser+  $decode['prizeWon']; 
+             }else{// en caso de no tener saldo anterior
+                $initial_balanceUser = 0;
+                $final_balanceUser = $initial_balanceUser+  $decode['prizeWon']; 
+             }     
 
               $wallet = Wallets::create([
                     'tipo' => 'premio',
                     'saldo_inicial' => $initial_balanceUser,
                     'saldo_final' => $final_balanceUser,
-                    'node_id' => 18,
+                    'node_id' => $request->node_id,
                     'usuario_id' => $request->cliente_id, ///trae id del cliente al que paga
                     'venta_id' => $sale->id
                 ]); 
@@ -272,7 +277,7 @@ class GamesController extends Controller
                     'tipo' => 'premio',
                     'saldo_inicial' => $initial_balance,
                     'saldo_final' => $final_balance,
-                    'node_id' => 18,
+                    'node_id' => $request->node_id,
                     'usuario_id' => Auth::user()->id, ///trae id del vendedor que paga
                     'venta_id' => $sale->id
                 ]);
