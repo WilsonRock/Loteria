@@ -40,10 +40,28 @@ class SalesController extends Controller
         }
  
     }
+    public function RafflesQuery(Request $request)
+    {
+      try {
+       
+            return response()->json([$this->request_service->RafflesQuery($request)], 201);
+   
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'La conexión con el proveedor no se pudo establecer'], 400);
+        }
+ 
+    }
     public function getPrueba(Request $request)
     { 
        try {
-        response()->json(['data' => $this->request_service->getPrueba($request)], 200);
+        $response = $this->request_service->getPrueba($request);
+        $RafflesQuery = $this->request_service->RafflesQuery($request);
+
+        $sock2 = json_decode($RafflesQuery,true);
+        $sock = json_decode($response,true);
+
+    return response()->json(['data' => $sock,'Raffle' => $sock2], 200);
+        //return response()->json(['data' => $sock], 201);          
        } catch (\Throwable $th) {
         echo($th);
         return response()->json(['error' => 'El provider no esta activo'], 400);
@@ -189,6 +207,7 @@ class SalesController extends Controller
                         ]);
                         if($request->codigoprovider=='2'){
                             $resp = $this->SalesQuery($request);
+                            $resp2 = $this->RafflesQuery($request);
                              $vendidos = json_decode($resp->content(),true);
                              foreach ($vendidos as $i => $element){
                                 $decode = json_decode($element,true);

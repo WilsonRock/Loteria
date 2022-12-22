@@ -50,7 +50,7 @@ class RequestService {
             'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
             'Content-Type' => 'application/json'
       
-        ])->get('https://app-betprovider.onrender.com/api/v1/games'.$data['codigoprovider'],
+        ])->get('https://app-betprovider.onrender.com/api/v1/games/'.$data['codigoprovider'],
     
         );
 
@@ -63,10 +63,10 @@ class RequestService {
        $a = json_encode($response);
        array_Push($all_data,$a);
 
-       echo($response);
-
+      // echo($response);
+     
       $a = json_encode($respt);
-      
+      return $response;
     } catch (\Exception $e) {
         //Log::error($e);  //  json(['message' => 'Juego creado con éxito','data' => $response], 201
         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
@@ -248,7 +248,36 @@ class RequestService {
      
       }
 
+  }
+  
+  public function RafflesQuery($data){
+    { 
+       try {
+        $data = [  
+          "numero"=>$data->raffle
+        ];
+
+            $response = Http::withHeaders([
+            'AppKey' => 'betappkey-test1-GYFJ4G',
+            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+         
+        ])->get('https://app-betprovider.onrender.com/api/v1/raffles/'.$data['numero'], 
+    
+      );
+      /* $response = $response->getBody()->getContents();
+      return $response; */
+ 
+      return $response;
+        
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
+       }
+     
+      }
+
   } 
+
+  
 
 
 
