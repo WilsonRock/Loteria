@@ -38,43 +38,29 @@ class RequestService {
       return $this->providerRepository->update($data, $provider->id);
   }
  */
-  public function getPrueba($data)
-  {
+public function getPrueba($data)
+{
     try {
-        $param = [
-            'codigoprovider' => $data['codigoprovider'],
-           ];
         $response = Http::withHeaders([
-            "Accept"=> "*/*",
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            "Accept" => "*/*",
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
             'Content-Type' => 'application/json'
-      
-        ])->get('https://app-betprovider.onrender.com/api/v1/games/'.$data['codigoprovider'],
-    
-        );
-
-       $all_data = array();
-       //$all_data = $response;
-       $respt =[
-        'codigoprovider' => $response['id'],
-       ];
-
-       $a = json_encode($response);
-       array_Push($all_data,$a);
-
-      // echo($response);
-     
-      $a = json_encode($respt);
-      return $response;
+        ])->get("https://app-betprovider.onrender.com/api/v1/games/{$data['codigoprovider']}");
+        
+        if ($response->ok()) {
+            $responseData = json_decode($response->body(), true);
+            return $responseData;
+        } else {
+            $errorMessage = $response->json()['message'];
+            return response()->json(['error' => $errorMessage], $response->status());
+        }
     } catch (\Exception $e) {
-        //Log::error($e);  //  json(['message' => 'Juego creado con éxito','data' => $response], 201
-        return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);
-
-        //return ("Consulta erronea");
-       // return $this->errorResponse(null, '¡Ups, algo va mal! Puede volver a intentarlo  o contactar con el administrador', 500);
+        // Handle the exception
+        return response()->json(['error' => '¡Ups, algo va mal! Puede volver a intentarlo o contactar con el administrador'], 500);
     }
-  }
+}
+
 
   public function SalesQuery(Request $data)
 
@@ -93,15 +79,17 @@ class RequestService {
     //$response = $this->makeRequest("POST", "http://localhost:3000" . "/sales", [], $data ,  Http::withHeaders(['headers' => ['ApiKey' => 'betappkey-2-B0A1C1','ApiToken' => '59SGQ81SHPUB1XLJC1FOR0OSYCE1G7ICZTM1XI'] ]) );
     $response = Http::withHeaders([
         'Accept'=> '*/*',  
-        'AppKey' => 'betappkey-test1-GYFJ4G',
-        'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+        'AppKey' => 'betappkey-test1-T3L38K',
+        'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
         'Content-Type'=> 'application/json',
         
     ])->post('https://app-betprovider.onrender.com/api/v1/sales', 
         $data
     );
+ 
     //echo($response);
     $response = $response->getBody()->getContents();
+    
     return $response;
   }
 
@@ -123,8 +111,8 @@ class RequestService {
           ];
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
             
         ])->post('https://app-betprovider.onrender.com/api/v1/sales/generate/winners', 
             $data
@@ -148,10 +136,10 @@ class RequestService {
             "numero"=>$data->id
           ];
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
             
-        ])->get('https://app-betprovider.onrender.com/api/v1/rules/game/'.$data['numero'], 
+        ])->get('https://app-betprovider.onrender.com/api/v1/rules/'.$data['numero'], 
         );
       echo($response);
      return response()->json(['data' => $response], 201);
@@ -172,8 +160,8 @@ class RequestService {
 
 
          $response = Http::withHeaders([
-          'AppKey' => 'betappkey-test1-GYFJ4G',
-          'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+          'AppKey' => 'betappkey-test1-T3L38K',
+          'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
           
       ])->post('https://app-betprovider.onrender.com/api/v1/sales/generate/winners', 
           $datas
@@ -205,8 +193,8 @@ class RequestService {
        }
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
             
         ])->get('https://app-betprovider.onrender.com/api/v1/sales/'.$data['numero'], 
            );
@@ -233,8 +221,8 @@ class RequestService {
         ];
        //   echo($data);
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
          
         ])->patch('https://app-betprovider.onrender.com/api/v1/sales/'.$data['numero'], 
         $body,     
@@ -256,18 +244,21 @@ class RequestService {
         $data = [  
           "numero"=>$data->raffle
         ];
+       
 
             $response = Http::withHeaders([
-            'AppKey' => 'betappkey-test1-GYFJ4G',
-            'AppToken' => '280TB25TASM3PF87SAP2NYFLA7RZLZOPCU7QS2P0MGJ6QTQ8CL0SJT884MCILCXZX9CVCAG48EHCDSZVLKCTF2ELMYBDTC87GFW8Z5OG9UAKXFLINHSDTYY1M5HM3MX3LHO08B9U6J4J3QI8JTGGJS264E7MBOYK09JYXUOFTNS2MVYN5V1IXGRZEY1AKRDJPFYWQ3PWVAZXF7ZA79MMK22ND0X5E4VSU6V2EU9ZFB4ABQFOXTDGQQ6BTN1BK23G',
+            'AppKey' => 'betappkey-test1-T3L38K',
+            'AppToken' => 'CUKXOF6ZJVIMKJJGTKJ2YSZJ4P040DQ15GDJBN74CFOF906RCOOXTECSRCGRRADOOLCYFJUDU123ESRXADTRICFTWBW3H78DQFS47OHU7IQ7VCWXYD6E1R7FQL0JX24GNSWJ6K99HTZ3BJXS8AYFS0I29M84XM1OSJ1HO9O57ARK9TN62V2JTUC49VSH4EY9XV202KNMOGXWQC4U9VH7S3RQMOR87R3VXXUHHR4ZOI7WQEJ49AO4SS3VLAE3ZN33',
          
         ])->get('https://app-betprovider.onrender.com/api/v1/raffles/'.$data['numero'], 
-    
+       
       );
-      /* $response = $response->getBody()->getContents();
-      return $response; */
- 
-      return $response;
+      $response = $response->getBody()->getContents();
+       $a  = json_decode($response,true);
+   //   dd($a);
+      return $a;
+      //dd($response = $response->getBody()->getContents());
+     // return $response;
         
        } catch (\Throwable $th) {
         return response()->json(['error' => 'No cuenta con saldo suficiente para realizar la venta','data' => $response], 400);

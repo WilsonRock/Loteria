@@ -163,43 +163,43 @@ class GamesController extends Controller
     }
 
     public  function createPayment(Request $request){
-    try {
-        
-        $sales = Sales::where('id', $request->id)->first();
-      //  dd($request->id);
-        if(isset($sales)){
-            $game = Games::where('node_id', $sales->node_id)->first();
-            $user = User::where('id', $sales->cliente_id)->first();
-            $provider=$this->getSalesState($sales['id_sale_provider']);
-            $vendidos =  $provider->original;
-            foreach ($vendidos as $i => $element){
-                $decode = $element;
-              }
-              if ($decode['stateSale']['description']==="ganado") {
-                //aprobar el llamado en la app para pagar el premio
-                $payment=true;
-                return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 200);
-                # code...
-              } else {
-                $payment=false;
-                return response()->json(['message' => ' Estado Apostado','sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 201);
-                # code...
-                //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
-              }
-              
-
-        }
-        if(!$sales){
-            return response()->json(['message' => 'No se encuentra el id de la venta'], 500);
-        }
-        //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
-
-        //return $sales;
-    } catch (\Throwable $th) {
-        dd($th);
-        return response()->json(['message' => 'Error'], 500);
+        try {
+            
+            $sales = Sales::where('id', $request->id)->first();
+          //  dd($request->id);
+            if(isset($sales)){
+                $game = Games::where('node_id', $sales->node_id)->first();
+                $user = User::where('id', $sales->cliente_id)->first();
+                $provider=$this->getSalesState($sales['id_sale_provider']);
+                $vendidos =  $provider->original;
+                foreach ($vendidos as $i => $element){
+                    $decode = $element;
+                  }
+                  if ($decode['stateSale']['description']==="ganado") {
+                    //aprobar el llamado en la app para pagar el premio
+                    $payment=true;
+                    return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 200);
+                    # code...
+                  } else {
+                    $payment=false;
+                    return response()->json(['message' => ' Estado Apostado','sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode,'Payment' => $payment], 201);
+                    # code...
+                    //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
+                  }
+                  
+    
+            }
+            if(!$sales){
+                return response()->json(['message' => 'No se encuentra el id de la venta'], 500);
+            }
+            //return response()->json(['sales' => $sales, 'Games' => $game,'Users' => $user,'Provider' => $decode], 200);
+    
+            //return $sales;
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error'], 500);
         }
     }
+    
 
     public function paymentProvider(Request $request)
     {

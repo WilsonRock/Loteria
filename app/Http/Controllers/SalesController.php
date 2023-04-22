@@ -52,20 +52,27 @@ class SalesController extends Controller
  
     }
     public function getPrueba(Request $request)
-    { 
-       try {
-        $response = $this->request_service->getPrueba($request);
-        $RafflesQuery = $this->request_service->RafflesQuery($request);
+    {
+        try {
 
-        $sock2 = json_decode($RafflesQuery,true);
-        $sock = json_decode($response,true);
+            $response = $this->request_service->getPrueba($request);
 
-    return response()->json(['data' => $sock,'Raffle' => $sock2], 200);
-        //return response()->json(['data' => $sock], 201);          
-       } catch (\Throwable $th) {
-        echo($th);
-        return response()->json(['error' => 'El provider no esta activo'], 400);
-       }
+            $RafflesQuery = $this->request_service->RafflesQuery($request);
+            return response()->json(['data' => $response, 'Raffle' => $RafflesQuery], 200);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $message = $response->getBody();
+                $statusCode = $response->getStatusCode();
+            } else {
+                $message = $e->getMessage();
+                $statusCode = 500;
+            }
+    
+            return response()->json(['error' => $message], $statusCode);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'El provider no esta activo'], 400);
+        }
     }
     
 
@@ -164,7 +171,7 @@ class SalesController extends Controller
                
                 $entity = Entities::where('node_id', Auth::user()->node_id)->first();
                 $game = Games::where('node_id', $request->juego_node_id)->first();
-                if($request->codigoprovider!=='2'){
+                if($request->codigoprovider!=='1'){
                     $req = $request->vendidos;
                     foreach($req as $el => $data) {
                         $req[$el] = [
@@ -184,9 +191,9 @@ class SalesController extends Controller
                     ];
                 }
                 if ($game->active === true && date('Y-m-d') <= $game->fecha_final) {
-                   //echo($request);
+                  
                     $raffle = Raffles::where('node_id', $request->juego_node_id)->first();
-                    if (isset($raffle->reservados_vendidos)&& $request->codigoprovider!=='2') {
+                    if (isset($raffle->reservados_vendidos)&& $request->codigoprovider!=='1') {
                         $vendidos = json_decode($raffle->reservados_vendidos);
                         foreach ($req as $el) {
                             foreach ($vendidos as $element) {
@@ -205,16 +212,14 @@ class SalesController extends Controller
                         $raffle->update([
                             'reservados_vendidos' => json_encode($req)
                         ]);
-                        if($request->codigoprovider=='2'){
+                        if($request->codigoprovider=='1'){
                             $resp = $this->SalesQuery($request);
                             $resp2 = $this->RafflesQuery($request);
-                             $vendidos = json_decode($resp->content(),true);
-                             foreach ($vendidos as $i => $element){
-                                $decode = json_decode($element,true);
-                              }
+                            $vendidos = json_decode($resp->content(),true);
+                            $dataArray = json_decode($vendidos['data'], true);
                         }
                     }
-    
+
                     if ($entity->balance >= $request->valor) {
                         $commission = ($request->valor * $game->comision) / 100;
                         $sale = Sales::create([
@@ -226,7 +231,7 @@ class SalesController extends Controller
                             'cliente_id' => $request->cliente_id,
                             'node_id' => $request->juego_node_id,
                             'state'=>'vendido',
-                            'id_sale_provider'=>$decode['id'],
+                            'id_sale_provider'=>$dataArray['id'],
                         ]);
 
                         $initial_balance = (float)$entity->balance;
